@@ -22,11 +22,11 @@ Manfaah creates a structured, trusted environment where businesses can exchange 
 
 Small businesses face three major challenges when accessing professional services:
 
--Limited cash flow, especially in early stages
+- Limited cash flow, especially in early stages
 
--Lack of structured and trustworthy service bartering systems
+- Lack of structured and trustworthy service bartering systems
 
--High upfront costs on freelancer and marketplace platforms
+- High upfront costs on freelancer and marketplace platforms
 
 Informal service exchanges lack accountability, tracking, and trust, while paid platforms require cash.
 Manfaah bridges this gap by providing a formal service exchange system backed by credits, contracts, and reputation.
