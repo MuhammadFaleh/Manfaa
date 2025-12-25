@@ -24,14 +24,17 @@ public class ServiceBid {
     private Double estimatedHours;
     @Column(name = "proposed_start_date", columnDefinition = "date not null")
     private LocalDate proposedStartDate;
-    @Column(columnDefinition = "date not null")
-    private LocalDate proposed_end_date;
-    @Column(columnDefinition = "varchar(20) not null check(payment_method = 'TOKENS' or payment_method='BARTER' or payment_method='EITHER')")
-    private String payment_method;
-    @Column(columnDefinition = )
-    private Double token_amount;
-
+    @Column(name = "proposed_end_date", columnDefinition = "date not null")
+    private LocalDate proposedEndDate;
+    @Column(name = "payment_method", columnDefinition = "varchar(20) not null check(payment_method = 'TOKENS' or payment_method='BARTER' or payment_method='EITHER')")
+    private String paymentMethod;
+    @Column(name = "token_amount", columnDefinition = "double not null" )
+    private Double tokenAmount;
     @Column(columnDefinition = "varchar(20) not null check(status = 'PENDING' or status='ACCEPTED' or status='REJECTED')")
     private String status;
+    @Column(name = "created_at", columnDefinition = "timestamp not null")
+    private LocalDateTime createdAt;
+
+    // relationships
 
 }
