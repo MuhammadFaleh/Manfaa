@@ -24,17 +24,17 @@ public class CompanyProfile {
     @Column(columnDefinition = "varchar(20) not null")
     private String industry;
 
-    @Column(columnDefinition = "int not null")
-    private Integer team_size;
+    @Column(name = "team_size", columnDefinition = "int not null")
+    private Integer teamSize;
 
     @Column(columnDefinition = "TEXT not null")
     private String description;
 
-    @Column(columnDefinition = "timestamp not null")
-    private LocalDate created_at;
+    @Column(name = "created_at", columnDefinition = "timestamp not null")
+    private LocalDate createdAt;
 
-    @Column(columnDefinition = "boolean not null")
-    private boolean is_subscriber;
+    @Column(name = "is_subscriber", columnDefinition = "boolean not null")
+    private boolean isSubscriber;
 
 //    @OneToOne
 //    @MapsId

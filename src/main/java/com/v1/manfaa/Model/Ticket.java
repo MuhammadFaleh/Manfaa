@@ -29,7 +29,7 @@ public class Ticket {
     @Column(columnDefinition = "varchar(20) not null")
     private String category;
 
-    @Column(columnDefinition = "varchar(20) not null")
+    @Column(columnDefinition = "varchar(20) not null check(priority = 'HIGH' or priority='MEDIUM' or priority='LOW')")
     private String priority;
 
     @Column(name = "created_at", columnDefinition = "timestamp not null")
@@ -38,7 +38,7 @@ public class Ticket {
     @Column(name = "resolved_at", columnDefinition = "timestamp")
     private LocalDateTime resolvedAt;
 
-    @Column(columnDefinition = "varchar(20)")
+    @Column(columnDefinition = "varchar(20) not null check(status = 'OPEN' or status = 'IN_REVIEW' or status = 'RESOLVED' or status = 'CLOSED')")
     private String status;
 
 }
