@@ -1,7 +1,10 @@
 package com.v1.manfaa.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.Set;
 
 @AllArgsConstructor
 @Entity
@@ -19,5 +22,10 @@ public class Category {
     @Column(columnDefinition = " text not null")
 
     private String description;
+
+    @OneToMany(cascade = CascadeType.ALL , mappedBy = "category")
+    private Set<ServiceRequest> serviceRequests;
+
+
 
 }

@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class ReviewDTOOut {
-    private Integer id;
+
 
     private Integer rating;
 

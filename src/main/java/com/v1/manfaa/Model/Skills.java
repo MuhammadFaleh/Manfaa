@@ -1,5 +1,6 @@
 package com.v1.manfaa.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,9 +23,9 @@ public class Skills {
 @Column(columnDefinition = "text not null")
     private  String description;
 
-   //  @ManyToOne()
-   // @JsonIgnore
-    // private CompanyProfile companyProfile;
+    @ManyToOne
+    @JsonIgnore
+     private CompanyProfile companyProfile;
 
 
 }

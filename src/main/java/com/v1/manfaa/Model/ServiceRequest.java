@@ -1,5 +1,6 @@
 package com.v1.manfaa.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,4 +37,8 @@ public class ServiceRequest {
     private LocalDateTime createdAt;
     @Column(name = "closed_at", columnDefinition = "timestamp")
     private LocalDateTime closedAt;
+
+    @ManyToOne
+    @JsonIgnore
+    private Category category;
 }

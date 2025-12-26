@@ -1,5 +1,6 @@
 package com.v1.manfaa.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,9 +32,20 @@ public class Review {
     private LocalDateTime created_at;
 
 
-   // @ManyToOne
-   // @JsonIgnore
-    // private CompanyProfile companyProfile;
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "reviewer_id")
+    private CompanyProfile reviewerProfile;
 
-    // Many to one with contract_agreement
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "reviewed_company_id")
+    private CompanyProfile reviewedProfile;
+
+    @ManyToOne
+    @JsonIgnore
+    private ContractAgreement contractAgreement;
+
+
+
 }

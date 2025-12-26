@@ -10,7 +10,6 @@ import lombok.Data;
 public class CategoryDTOOut {
 
 
-    private Integer id;
 
     private String name;
 
