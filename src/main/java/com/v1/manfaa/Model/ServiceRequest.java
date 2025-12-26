@@ -1,5 +1,6 @@
 package com.v1.manfaa.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,6 +9,7 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -36,4 +38,19 @@ public class ServiceRequest {
     private LocalDateTime createdAt;
     @Column(name = "closed_at", columnDefinition = "timestamp")
     private LocalDateTime closedAt;
+
+    // relationships
+    @OneToMany(mappedBy = "serviceRequest")
+    private Set<ServiceBid> serviceBid;
+    @ManyToOne
+    @JsonIgnore
+    private CompanyProfile companyProfile;
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "barter_category_id")
+    private Category barterCategory;
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
 }

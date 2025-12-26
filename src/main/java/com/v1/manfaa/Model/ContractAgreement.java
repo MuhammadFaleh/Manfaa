@@ -1,5 +1,6 @@
 package com.v1.manfaa.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,4 +35,12 @@ public class ContractAgreement {
     private LocalDateTime createdAt;
     @Column(name = "closed_at", columnDefinition = "timestamp")
     private LocalDateTime closedAt;
+    @OneToOne
+    @JsonIgnore
+    @JoinColumn(name = "service_request_id")
+    private ServiceRequest primaryService;
+    @OneToOne
+    @JsonIgnore
+    @JoinColumn(name = "service_bid_id")
+    private ServiceBid serviceBid;
 }

@@ -1,5 +1,6 @@
 package com.v1.manfaa.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.context.annotation.Configuration;
@@ -38,5 +39,13 @@ public class ServiceBid {
     private LocalDateTime createdAt;
 
     // relationships
+    @ManyToOne
+    @JsonIgnore
+    private ServiceRequest serviceRequest;
+    @ManyToOne
+    @JsonIgnore
+    private CompanyProfile companyProfile;
+
+
 
 }

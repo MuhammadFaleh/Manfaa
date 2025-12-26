@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @AllArgsConstructor
 @Entity
@@ -39,5 +40,11 @@ public class CompanyProfile {
 //    @OneToOne
 //    @MapsId
 //    private User user;
+
+    // relationships
+    @OneToMany(mappedBy = "companyProfile")
+    private Set<ServiceRequest> serviceRequest;
+    @OneToMany(mappedBy = "companyProfile")
+    private Set<ServiceBid> serviceBid;
 
 }
