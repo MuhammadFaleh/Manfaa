@@ -38,7 +38,7 @@ public class CategoryService {
         if(user == null){
             throw new ApiException("User not found");
         }
-        Category category = new Category(null, categoryDTOIn.getName(), categoryDTOIn.getDescription(), null);
+        Category category = new Category(null, categoryDTOIn.getName(), categoryDTOIn.getDescription(), null, null);
         categoryRepository.save(category);
 
 
