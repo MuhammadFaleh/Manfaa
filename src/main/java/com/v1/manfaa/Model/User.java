@@ -43,7 +43,7 @@ public class User implements UserDetails {
     @Column(columnDefinition = "varchar(255) not null")
     private String role;
 
-    @OneToOne(cascade = CascadeType.ALL , mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
     private CompanyProfile companyProfile;
 

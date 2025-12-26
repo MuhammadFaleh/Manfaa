@@ -25,9 +25,8 @@ public class Configuration {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/user/**").permitAll()
-
-                        .anyRequest().permitAll())
+                        .anyRequest().permitAll()
+                        )
 
                 .logout(logout -> logout
                         .logoutUrl("/logout")

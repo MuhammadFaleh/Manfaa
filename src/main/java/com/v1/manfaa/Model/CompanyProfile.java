@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -33,13 +34,13 @@ public class CompanyProfile {
     private String description;
 
     @Column(name = "created_at", columnDefinition = "timestamp not null")
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "is_subscriber", columnDefinition = "boolean not null")
     private Boolean isSubscriber;
 
     @OneToOne
-    @MapsId
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
 
     @OneToMany(cascade = CascadeType.ALL , mappedBy = "companyProfile")
