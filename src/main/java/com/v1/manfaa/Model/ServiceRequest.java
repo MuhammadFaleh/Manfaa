@@ -53,4 +53,6 @@ public class ServiceRequest {
     @JsonIgnore
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+    @OneToOne(mappedBy = "serviceRequest")
+    private ContractAgreement contractAgreement;
 }

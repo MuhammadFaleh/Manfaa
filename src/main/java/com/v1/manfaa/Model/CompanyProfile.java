@@ -46,5 +46,9 @@ public class CompanyProfile {
     private Set<ServiceRequest> serviceRequest;
     @OneToMany(mappedBy = "companyProfile")
     private Set<ServiceBid> serviceBid;
+    @OneToMany(mappedBy = "providerCompanyProfile" )
+    private Set<ContractAgreement> providerContractAgreement;
+    @OneToMany(mappedBy = "requesterCompanyProfile")
+    private CompanyProfile requesterContractAgreement;
 
 }

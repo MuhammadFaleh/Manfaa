@@ -45,7 +45,8 @@ public class ServiceBid {
     @ManyToOne
     @JsonIgnore
     private CompanyProfile companyProfile;
-
+    @OneToOne(mappedBy = "serviceBid")
+    private ContractAgreement contractAgreement;
 
 
 }
