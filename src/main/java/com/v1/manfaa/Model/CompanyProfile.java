@@ -36,11 +36,11 @@ public class CompanyProfile {
     private LocalDate createdAt;
 
     @Column(name = "is_subscriber", columnDefinition = "boolean not null")
-    private boolean isSubscriber;
+    private Boolean isSubscriber;
 
     @OneToOne
     @MapsId
-  private User user;
+    private User user;
 
     @OneToMany(cascade = CascadeType.ALL , mappedBy = "companyProfile")
     private Set<Skills> skills;

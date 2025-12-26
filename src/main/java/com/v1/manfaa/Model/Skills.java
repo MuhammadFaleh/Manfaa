@@ -25,7 +25,7 @@ public class Skills {
 
     @ManyToOne
     @JsonIgnore
-     private CompanyProfile companyProfile;
+    private CompanyProfile companyProfile;
 
 
 }
