@@ -49,9 +49,14 @@ public class SubscriptionService {
 
       Subscription subscription = new Subscription(null,LocalDate.now(),LocalDate.now().plusMonths(1),true,companyProfile);
 
-      companyProfile.getSubscription().add(subscription);
+        companyProfile.getSubscription().add(subscription);
+        companyProfile.setSubscriber(true);
 
+        subscription.setCompanyProfile(companyProfile);
       subscriptionRepository.save(subscription);
+      companyProfileRepository.save(companyProfile);
+
+
 
 
     }
@@ -70,7 +75,10 @@ public class SubscriptionService {
         Subscription subscription = new Subscription(null,LocalDate.now(),LocalDate.now().plusYears(1),true,companyProfile);
 
         companyProfile.getSubscription().add(subscription);
+        companyProfile.setSubscriber(true);
+        subscription.setCompanyProfile(companyProfile);
         subscriptionRepository.save(subscription);
+        companyProfileRepository.save(companyProfile);
 
 
     }
