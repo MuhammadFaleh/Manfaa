@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class SkillsDTOOut {
 
-    private Integer id;
+
 
     private String name;
 

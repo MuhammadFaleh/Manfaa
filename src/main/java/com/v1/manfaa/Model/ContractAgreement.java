@@ -63,4 +63,7 @@ public class ContractAgreement {
     @JsonIgnore
     @JoinColumn(name = "requester_company_id", nullable = false)
     private CompanyProfile requesterCompanyProfile;
+
+    @OneToMany(cascade = CascadeType.ALL , mappedBy = "contractAgreement")
+    private Set<Review> reviews;
 }

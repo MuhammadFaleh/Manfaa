@@ -43,9 +43,9 @@ public class User implements UserDetails {
     @Column(columnDefinition = "varchar(255) not null")
     private String role;
 
-    //@OneToOne(cascade = CascadeType.ALL , mappedBy = "user")
-    //@JsonIgnore
-   // private CompanyProfile companyProfile;
+    @OneToOne(cascade = CascadeType.ALL , mappedBy = "user")
+    @JsonIgnore
+    private CompanyProfile companyProfile;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
