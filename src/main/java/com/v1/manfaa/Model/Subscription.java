@@ -33,4 +33,6 @@ public class Subscription {
     @JsonIgnore
     private CompanyProfile companyProfile;
 
+
+
 }

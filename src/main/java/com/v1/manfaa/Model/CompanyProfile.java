@@ -72,4 +72,8 @@ public class CompanyProfile {
     @OneToMany(mappedBy = "requesterCompanyProfile")
     private Set<ContractAgreement> requesterContractAgreement;
 
+
+    @OneToMany(mappedBy = "companyProfile")
+    private Set<Subscription> subscription;
+
 }
