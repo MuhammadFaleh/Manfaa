@@ -56,12 +56,12 @@ public class ContractAgreement {
 
     @ManyToOne
     @JsonIgnore
-    @JoinColumn(name = "provider_company_id", nullable = false)
+    @JoinColumn(name = "provider_company_id") //Todo: add nullable = false
     private CompanyProfile providerCompanyProfile;
 
     @ManyToOne
     @JsonIgnore
-    @JoinColumn(name = "requester_company_id", nullable = false)
+    @JoinColumn(name = "requester_company_id") //Todo: add nullable = false
     private CompanyProfile requesterCompanyProfile;
 
     @OneToMany(cascade = CascadeType.ALL , mappedBy = "contractAgreement")

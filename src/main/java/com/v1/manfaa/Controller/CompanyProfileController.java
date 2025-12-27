@@ -1,5 +1,6 @@
 package com.v1.manfaa.Controller;
 
+import com.v1.manfaa.Api.ApiResponse;
 import com.v1.manfaa.DTO.In.CompanyProfileDTOIn;
 import com.v1.manfaa.DTO.In.RegisterDTOIn;
 import com.v1.manfaa.DTO.Out.CompanyProfileDTOOut;
@@ -28,20 +29,20 @@ public class CompanyProfileController {
     @PostMapping("/register")
     public ResponseEntity<?> registerCompany(@Valid @RequestBody RegisterDTOIn dto) {
         companyService.registerCompany(dto);
-        return ResponseEntity.ok("Company Registered Successfully");
+        return ResponseEntity.ok(new ApiResponse("Company Registered Successfully"));
     }
 
     @PutMapping("/update/{companyProfileId}")
     public ResponseEntity<?> updateCompanyProfile(@PathVariable Integer companyProfileId,
                                                   @Valid @RequestBody CompanyProfileDTOIn dto) {
         companyService.updateCompanyProfile(companyProfileId, dto);
-        return ResponseEntity.ok("Company Updated Successfully");
+        return ResponseEntity.ok(new ApiResponse("Company Updated Successfully"));
     }
 
     @DeleteMapping("/delete/{companyProfileId}")
     public ResponseEntity<?> deleteCompanyProfile(@PathVariable Integer companyProfileId) {
         companyService.deleteCompanyProfile(companyProfileId);
-        return ResponseEntity.ok("Company Deleted Successfully");
+        return ResponseEntity.ok(new ApiResponse("Company Deleted Successfully"));
     }
 }
 
