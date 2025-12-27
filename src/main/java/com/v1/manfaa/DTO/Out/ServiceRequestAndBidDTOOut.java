@@ -1,24 +1,21 @@
 package com.v1.manfaa.DTO.Out;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.v1.manfaa.Model.Category;
-import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
-public class ServiceRequestDTOOut {
+public class ServiceRequestAndBidDTOOut {
     private Integer serviceRequestId;
     private String title;
     private String description;
     private String deliverables;
-    private LocalDate proposedStartDate;
-    private LocalDate proposedEndDate;
     private String exchangeType;
     private Double tokenAmount;
     private String category;
     private String categoryRequested;
+    private Set<ServiceBidShortDTOOut> Bids;
 }

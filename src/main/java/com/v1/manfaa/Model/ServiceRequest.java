@@ -20,6 +20,8 @@ public class ServiceRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(columnDefinition = "varchar(100) not null")
+    private String title;
     @Column(columnDefinition = "text not null check(Length(description)<=500)")
     private String description;
     @Column(columnDefinition = "text not null check(length(deliverables)<=500)")
