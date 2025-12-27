@@ -5,10 +5,14 @@ import com.v1.manfaa.ValidationGroups.ValidationGroup1;
 import com.v1.manfaa.ValidationGroups.ValidationGroup2;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Data
+@AllArgsConstructor
 public class ServiceBidDTOIn {
     private Integer serviceBidId;
     @Size(max = 500, min = 50, message = "description should be between 50 and 500", groups = ValidationGroup1.class)
@@ -28,7 +32,7 @@ public class ServiceBidDTOIn {
     @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}", message = "Date must be in yyyy-MM-dd format", groups = ValidationGroup1.class)
     private LocalDate proposedEndDate;
     @NotBlank(message = "exchange type should not be empty", groups = ValidationGroup1.class)
-    @Pattern(regexp = "TOKENS|BARTER|EITHER", message = "exchange Type should be TOKENS , BARTER or EITHER ", groups = ValidationGroup1.class)
+    @Pattern(regexp = "TOKENS|BARTER", message = "exchange Type should be TOKENS , BARTER", groups = ValidationGroup1.class)
     private String exchangeType;
     @NotNull(message = "token amount should not be null", groups = ValidationGroup1.class)
     @PositiveOrZero(message = "token amount should be zero or positive", groups = ValidationGroup1.class)

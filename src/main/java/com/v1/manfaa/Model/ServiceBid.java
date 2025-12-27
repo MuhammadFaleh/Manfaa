@@ -29,7 +29,7 @@ public class ServiceBid {
     private LocalDate proposedStartDate;
     @Column(name = "proposed_end_date", columnDefinition = "date not null")
     private LocalDate proposedEndDate;
-    @Column(name = "payment_method", columnDefinition = "varchar(20) not null check(payment_method = 'TOKENS' or payment_method='BARTER' or payment_method='EITHER')")
+    @Column(name = "payment_method", columnDefinition = "varchar(20) not null check(payment_method = 'TOKENS' or payment_method='BARTER')")
     private String paymentMethod;
     @Column(name = "token_amount", columnDefinition = "double" )
     private Double tokenAmount;

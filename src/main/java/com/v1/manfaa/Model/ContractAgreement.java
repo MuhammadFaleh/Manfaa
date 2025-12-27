@@ -30,13 +30,18 @@ public class ContractAgreement {
     private String exchangeType;
     @Column(name = "token_amount", columnDefinition = "double" )
     private Double tokenAmount;
-    @Column(columnDefinition = "varchar(20) not null check(status = 'ACTIVE' or status='COMPLETED' or status='CANCELLED' or status='DISPUTED')")
+    @Column(columnDefinition = "varchar(20) not null check(status='PENDING' or status = 'ACTIVE' or status='COMPLETED' or status='CANCELLED' or status='DISPUTED')")
     private String status;
     @Column(name = "created_at", columnDefinition = "timestamp not null")
     private LocalDateTime createdAt;
     @Column(name = "closed_at", columnDefinition = "timestamp")
     private LocalDateTime closedAt;
-
+    @Column(name = "first_party_agreement", columnDefinition = "varchar(20) not null check(first_party_agreement= 'PENDING' or " +
+            "first_party_agreement = 'ACCEPTED' or first_party_agreement='REJECTED')")
+    private String firstPartyAgreement;
+    @Column(name = "second_party_agreement", columnDefinition = "varchar(20) not null check(second_party_agreement= 'PENDING' or " +
+            "second_party_agreement = 'ACCEPTED' or second_party_agreement='REJECTED')")
+    private String secondPartyAgreement;
     @OneToMany(mappedBy = "contractAgreement")
     private Set<Ticket> tickets;
 

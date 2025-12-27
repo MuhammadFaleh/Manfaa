@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -17,5 +18,5 @@ public class ServiceRequestAndBidDTOOut {
     private Double tokenAmount;
     private String category;
     private String categoryRequested;
-    private Set<ServiceBidShortDTOOut> Bids;
+    private List<ServiceBidShortDTOOut> Bids;
 }
