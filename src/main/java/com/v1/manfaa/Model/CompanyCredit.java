@@ -1,5 +1,6 @@
 package com.v1.manfaa.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,5 +34,10 @@ public class CompanyCredit {
 
     @OneToMany(mappedBy = "paidCompany")
     private Set<CreditTransaction> incomingTransactions;
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "companyCredit")
+    @PrimaryKeyJoinColumn
+    @JsonIgnore
+    private CompanyProfile companyProfile;
 
 }

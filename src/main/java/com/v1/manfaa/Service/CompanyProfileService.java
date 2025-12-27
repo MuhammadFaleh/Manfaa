@@ -4,8 +4,10 @@ import com.v1.manfaa.Api.ApiException;
 import com.v1.manfaa.DTO.In.CompanyProfileDTOIn;
 import com.v1.manfaa.DTO.In.RegisterDTOIn;
 import com.v1.manfaa.DTO.Out.CompanyProfileDTOOut;
+import com.v1.manfaa.Model.CompanyCredit;
 import com.v1.manfaa.Model.CompanyProfile;
 import com.v1.manfaa.Model.User;
+import com.v1.manfaa.Repository.CompanyCreditRepository;
 import com.v1.manfaa.Repository.CompanyProfileRepository;
 import com.v1.manfaa.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ public class CompanyProfileService {
 
     private final CompanyProfileRepository companyProfileRepository;
     private final UserRepository userRepository;
+    private final CompanyCreditRepository companyCreditRepository;
 
     public List<CompanyProfileDTOOut> getAllCompanyProfiles() {
         return convertToDtoOut(companyProfileRepository.findAll());
@@ -51,6 +54,12 @@ public class CompanyProfileService {
         company.setCreatedAt(LocalDateTime.now());
         company.setIsSubscriber(false);
 
+        CompanyCredit companyCredit = new CompanyCredit();
+        companyCredit.setBalance(0);
+        companyCredit.setTotalEarned(0);
+        companyCredit.setTotalSpent(0);
+
+        company.setCompanyCredit(companyCredit);
         company.setUser(user);
         user.setCompanyProfile(company);
         userRepository.save(user);
@@ -76,11 +85,16 @@ public class CompanyProfileService {
                 .orElseThrow(() -> new ApiException("Company Profile not found"));
 
         User user = company.getUser();
+        CompanyCredit companyCredit = company.getCompanyCredit();
 
+        companyCredit.setCompanyProfile(null);
         user.setCompanyProfile(null);
+
         company.setUser(null);
+        company.setCompanyCredit(null);
 
         companyProfileRepository.delete(company);
+        companyCreditRepository.delete(companyCredit);
         userRepository.delete(user);
     }
 

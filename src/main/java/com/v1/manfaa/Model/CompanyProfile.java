@@ -40,7 +40,7 @@ public class CompanyProfile {
     private Boolean isSubscriber;
 
     @OneToOne
-    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    @JoinColumn(name = "user_id", unique = true)
     private User user;
 
     @OneToMany(cascade = CascadeType.ALL , mappedBy = "companyProfile")
@@ -53,6 +53,10 @@ public class CompanyProfile {
     @OneToMany(mappedBy = "reviewedProfile")
     @JsonIgnore
     private Set<Review> receivedReviews;
+
+    @OneToOne
+    @MapsId
+    private CompanyCredit companyCredit;
 
 
 
