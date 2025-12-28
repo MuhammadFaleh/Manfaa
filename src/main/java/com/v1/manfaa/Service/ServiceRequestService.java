@@ -410,6 +410,44 @@ public class ServiceRequestService {
         return dtoOuts;
     }
 
+    public List<ServiceRequestDTOOut> getExpiredOpenServiceRequests() {
+        List<ServiceRequest> requests = serviceRequestRepository.findExpiredOpenServiceRequests();
+
+        if (requests.isEmpty()) {
+            throw new ApiException("No expired open service requests found");
+        }
+
+        List<ServiceRequestDTOOut> dtoOuts = new ArrayList<>();
+        for (ServiceRequest request : requests) {
+            dtoOuts.add(convertToDTOOut(request));
+        }
+
+        return dtoOuts;
+    }
+
+    public List<ServiceRequestDTOOut> getServiceRequestsByCreationDateRange(LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        if (startDateTime == null || endDateTime == null) {
+            throw new ApiException("Start date-time and end date-time cannot be null");
+        }
+
+        if (startDateTime.isAfter(endDateTime)) {
+            throw new ApiException("Start date-time cannot be after end date-time");
+        }
+
+        List<ServiceRequest> requests =
+                serviceRequestRepository.findServiceRequestsByCreationDateRange(startDateTime, endDateTime);
+
+        if (requests.isEmpty()) {
+            throw new ApiException("No service requests found within the specified creation date range");
+        }
+
+        List<ServiceRequestDTOOut> dtoOuts = new ArrayList<>();
+        for (ServiceRequest request : requests) {
+            dtoOuts.add(convertToDTOOut(request));
+        }
+
+        return dtoOuts;
+    }
 
     public List<ServiceRequestDTOOut> getOpenServiceRequestOfCompany(Integer companyid){
         CompanyProfile company = companyProfileRepository.findCompanyProfileById(companyid);

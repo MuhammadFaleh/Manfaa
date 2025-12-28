@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ServiceRequestRepository extends JpaRepository<ServiceRequest, Integer> {
@@ -34,6 +35,14 @@ public interface ServiceRequestRepository extends JpaRepository<ServiceRequest, 
     List<ServiceRequest> findAllByOrderByTokenAmountDesc();
 
     List<ServiceRequest> findServiceRequestsByStatus(String status);
+
+    @Query("SELECT sr FROM ServiceRequest sr WHERE sr.status = 'OPEN' AND sr.proposedStartDate < CURRENT_DATE")
+    List<ServiceRequest> findExpiredOpenServiceRequests();
+
+    @Query("SELECT sr FROM ServiceRequest sr WHERE sr.createdAt BETWEEN ?1 AND ?2")
+    List<ServiceRequest> findServiceRequestsByCreationDateRange(LocalDateTime startDateTime, LocalDateTime endDateTime);
+
+
 
 
 
