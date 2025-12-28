@@ -388,6 +388,28 @@ public class ServiceRequestService {
         return dtoOuts;
     }
 
+    public List<ServiceRequestDTOOut> getServiceRequestsByStatus(String status) {
+        if (!status.equalsIgnoreCase("OPEN") &&
+                !status.equalsIgnoreCase("CLOSED") &&
+                !status.equalsIgnoreCase("CANCELLED")) {
+            throw new ApiException("Invalid status. Must be OPEN, CLOSED, or CANCELLED");
+        }
+
+        List<ServiceRequest> requests =
+                serviceRequestRepository.findServiceRequestsByStatus(status.toUpperCase());
+
+        if (requests.isEmpty()) {
+            throw new ApiException("No service requests found with status: " + status);
+        }
+
+        List<ServiceRequestDTOOut> dtoOuts = new ArrayList<>();
+        for (ServiceRequest request : requests) {
+            dtoOuts.add(convertToDTOOut(request));
+        }
+
+        return dtoOuts;
+    }
+
 
     public List<ServiceRequestDTOOut> getOpenServiceRequestOfCompany(Integer companyid){
         CompanyProfile company = companyProfileRepository.findCompanyProfileById(companyid);

@@ -26,7 +26,7 @@ public class Ticket {
     @Column(columnDefinition = "TEXT not null")
     private String body;
 
-    @Column(columnDefinition = "varchar(20) not null")
+    @Column(columnDefinition = "varchar(20) not null check(category = 'CONTRACT_COMPLIANT' or category='SUGGESTION' or category='OTHERS')")
     private String category;
 
     @Column(columnDefinition = "varchar(20) not null check(priority = 'HIGH' or priority='MEDIUM' or priority='LOW')")

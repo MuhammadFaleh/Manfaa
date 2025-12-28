@@ -4,8 +4,6 @@ package com.v1.manfaa.Controller;
 import com.v1.manfaa.Api.ApiResponse;
 import com.v1.manfaa.DTO.In.SkillsDTOIn;
 import com.v1.manfaa.DTO.Out.SkillsDTOOut;
-import com.v1.manfaa.DTO.Out.UserDTOOut;
-import com.v1.manfaa.Model.Skills;
 import com.v1.manfaa.Service.SkillsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

@@ -3,7 +3,6 @@ package com.v1.manfaa.Service;
 import com.v1.manfaa.Api.ApiException;
 import com.v1.manfaa.DTO.In.ReviewDTOIn;
 import com.v1.manfaa.DTO.Out.ReviewDTOOut;
-import com.v1.manfaa.DTO.Out.UserDTOOut;
 import com.v1.manfaa.Model.CompanyProfile;
 import com.v1.manfaa.Model.ContractAgreement;
 import com.v1.manfaa.Model.Review;

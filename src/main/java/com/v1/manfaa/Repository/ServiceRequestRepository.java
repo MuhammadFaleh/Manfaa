@@ -33,6 +33,9 @@ public interface ServiceRequestRepository extends JpaRepository<ServiceRequest, 
 
     List<ServiceRequest> findAllByOrderByTokenAmountDesc();
 
+    List<ServiceRequest> findServiceRequestsByStatus(String status);
+
+
 
 
 
