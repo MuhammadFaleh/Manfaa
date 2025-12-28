@@ -15,6 +15,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 @org.springframework.context.annotation.Configuration
 @EnableWebSecurity
@@ -32,6 +37,21 @@ public class Configuration {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList(//react url once we add it));
+
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowCredentials(true);
+        configuration.setExposedHeaders(Arrays.asList("Authorization"));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -40,14 +60,16 @@ public class Configuration {
                 .authorizeHttpRequests(auth -> auth
                         // Public endpoints
                         .requestMatchers("/api/v1/auth/**").permitAll()
-                        .requestMatchers("/api/v1/user/add").permitAll()
+                        .requestMatchers("/api/v1/users/add").permitAll()
 
                         // admin endpoints
+                        .requestMatchers("/api/v1/service-request/get-requests").hasAuthority("ADMIN")
 
                         // company endpoints
+                        .requestMatchers("/api/v1/service-request/create-request").hasAuthority("COMPANY")
 
                         // subscription endpoints
-                        .requestMatchers("/api/v1/subscriptions/**").hasAuthority("STARTUP")
+                        .requestMatchers("/api/v1/subscriptions/**").hasAuthority("COMPANY")
 
                         .anyRequest().authenticated()
                 )

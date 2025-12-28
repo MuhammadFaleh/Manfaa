@@ -53,15 +53,17 @@ public class ServiceBidService {
 
         if(serviceRequest.getExchangeType().equalsIgnoreCase("EITHER")){
             bid.setPaymentMethod(dtoIn.getExchangeType());
-        }else {
+        }
+        if(serviceRequest.getExchangeType().equalsIgnoreCase(dtoIn.getExchangeType())){
             bid.setPaymentMethod(serviceRequest.getExchangeType());
+        }else{
+            throw new ApiException("exchange type not the same as the request");
         }
 
         bid.setCreatedAt(LocalDateTime.now());
         bid.setStatus("PENDING");
         bid.setServiceRequest(serviceRequest);
         bid.setCompanyProfile(companyProfile);
-        bid.setServiceRequest(serviceRequest);
         serviceRequest.getServiceBid().add(bid);
         companyProfile.getServiceBid().add(bid);
         serviceBidRepository.save(bid);
