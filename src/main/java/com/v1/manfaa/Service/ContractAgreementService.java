@@ -161,6 +161,9 @@ public class ContractAgreementService {
         contractAgreementRepository.save(contractAgreement);
     }
 
+    //Todo: Set Completed -> (Token or Barter) with token transfer logic
+    //Todo: Set DISPUTED - (Admin)
+
     public ContractAgreementDTOOut convertToDTO(ContractAgreement contract){
         return new ContractAgreementDTOOut(contract.getId(),contract.getStartDate(),contract.getEndDate(),
                 contract.getIsExtended(),contract.getExchangeType(),contract.getTokenAmount(),contract.getStatus(),

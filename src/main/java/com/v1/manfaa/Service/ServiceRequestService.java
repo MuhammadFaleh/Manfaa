@@ -15,6 +15,7 @@ import com.v1.manfaa.Repository.ServiceRequestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,10 @@ public class ServiceRequestService {
 
         if(category == null){
             throw new ApiException("category not found");
+        }
+
+        if(companyProfile.getCompanyCredit().getBalance() < dtoIn.getTokenAmount()){
+            throw new ApiException("not enough credit");
         }
 
         ServiceRequest serviceRequest = convertToEntity(dtoIn);
@@ -149,8 +154,61 @@ public class ServiceRequestService {
         serviceRequestRepository.delete(serviceRequest);
     }
 
+    public void createBarterRequest(ServiceRequestDTOIn dtoIn, Integer id){
+        CompanyProfile companyProfile = companyProfileRepository.findCompanyProfileById(id);
+        Category category = categoryRepository.findCategoryById(dtoIn.getCategory());
 
-    //Todo: add logic for barter and either
+        if(companyProfile == null){
+            throw new ApiException("company not found");
+        }
+
+        if(category == null){
+            throw new ApiException("category not found");
+        }
+
+        ServiceRequest serviceRequest = convertToEntity(dtoIn);
+
+        serviceRequest.setCategory(category);
+        serviceRequest.setCompanyProfile(companyProfile);
+        serviceRequest.setExchangeType("BARTER");
+        serviceRequest.setCreatedAt(LocalDateTime.now());
+        serviceRequest.setStatus("OPEN");
+        category.getServiceRequest().add(serviceRequest);
+        companyProfile.getServiceRequest().add(serviceRequest);
+
+        companyProfileRepository.save(companyProfile);
+        categoryRepository.save(category);
+        serviceRequestRepository.save(serviceRequest);
+    }
+
+    public void createEitherRequest(ServiceRequestDTOIn dtoIn, Integer id){
+        CompanyProfile companyProfile = companyProfileRepository.findCompanyProfileById(id);
+        Category category = categoryRepository.findCategoryById(dtoIn.getCategory());
+
+        if(companyProfile == null){
+            throw new ApiException("company not found");
+        }
+
+        if(category == null){
+            throw new ApiException("category not found");
+        }
+
+        ServiceRequest serviceRequest = convertToEntity(dtoIn);
+
+        serviceRequest.setCategory(category);
+        serviceRequest.setCompanyProfile(companyProfile);
+        serviceRequest.setExchangeType("EITHER");
+        serviceRequest.setCreatedAt(LocalDateTime.now());
+        serviceRequest.setStatus("OPEN");
+        category.getServiceRequest().add(serviceRequest);
+        companyProfile.getServiceRequest().add(serviceRequest);
+
+        companyProfileRepository.save(companyProfile);
+        categoryRepository.save(category);
+        serviceRequestRepository.save(serviceRequest);
+    }
+
+
 
     public List<ServiceRequestAndBidDTOOut> getAllRequestWithBids(){
         List<ServiceRequestAndBidDTOOut> dtoOuts = new ArrayList<>();
@@ -166,6 +224,226 @@ public class ServiceRequestService {
             throw new ApiException("no request found");
         }
         return convertToFullDTOOut(request);
+    }
+
+    public List<ServiceRequestDTOOut> getServiceRequestOfCompany(Integer companyid){
+        CompanyProfile company = companyProfileRepository.findCompanyProfileById(companyid);
+
+        if (company == null)
+            throw new ApiException("company not found");
+
+        List<ServiceRequestDTOOut> dtoOuts = new ArrayList<>();
+        for (ServiceRequest request: serviceRequestRepository.findServiceRequestsByCompanyProfile(company)) {
+            dtoOuts.add(convertToDTOOut(request));
+        }
+
+        if(dtoOuts.isEmpty()){
+            throw new ApiException("no requests found");
+        }
+
+        return dtoOuts;
+    }
+
+    public List<ServiceRequestDTOOut> searchServiceRequests(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            throw new ApiException("Search keyword cannot be empty");
+        }
+
+        List<ServiceRequest> requests =
+                serviceRequestRepository.searchServiceRequestsByKeyword(keyword.trim());
+
+        if (requests.isEmpty()) {
+            throw new ApiException("No service requests found matching the keyword: " + keyword);
+        }
+
+        List<ServiceRequestDTOOut> dtoOuts = new ArrayList<>();
+        for (ServiceRequest request : requests) {
+            dtoOuts.add(convertToDTOOut(request));
+        }
+
+        return dtoOuts;
+    }
+
+
+    public List<ServiceRequestDTOOut> getServiceRequestsByCategory(Integer categoryId) {
+        Category category = categoryRepository.findCategoryById(categoryId);
+
+        if (category == null) {
+            throw new ApiException("Category not found");
+        }
+
+        List<ServiceRequest> requests =
+                serviceRequestRepository.findServiceRequestsByCategoryId(categoryId);
+
+        if (requests.isEmpty()) {
+            throw new ApiException("No service requests found for this category");
+        }
+
+        List<ServiceRequestDTOOut> dtoOuts = new ArrayList<>();
+        for (ServiceRequest request : requests) {
+            dtoOuts.add(convertToDTOOut(request));
+        }
+
+        return dtoOuts;
+    }
+
+    public List<ServiceRequestDTOOut> getServiceRequestsByExchangeType(String exchangeType) {
+        if (!exchangeType.equalsIgnoreCase("TOKENS") &&
+                !exchangeType.equalsIgnoreCase("BARTER") &&
+                !exchangeType.equalsIgnoreCase("EITHER")) {
+            throw new ApiException("Invalid exchange type. Must be TOKENS, BARTER, or EITHER");
+        }
+
+        List<ServiceRequest> requests =
+                serviceRequestRepository.findServiceRequestsByExchangeType(exchangeType.toUpperCase());
+
+        if (requests.isEmpty()) {
+            throw new ApiException("No service requests found with exchange type: " + exchangeType);
+        }
+
+        List<ServiceRequestDTOOut> dtoOuts = new ArrayList<>();
+        for (ServiceRequest request : requests) {
+            dtoOuts.add(convertToDTOOut(request));
+        }
+
+        return dtoOuts;
+    }
+
+    public List<ServiceRequestDTOOut> getServiceRequestsByDateRange(LocalDate startDate, LocalDate endDate) {
+        if (startDate == null || endDate == null) {
+            throw new ApiException("Start date and end date cannot be null");
+        }
+
+        if (startDate.isAfter(endDate)) {
+            throw new ApiException("Start date cannot be after end date");
+        }
+
+        List<ServiceRequest> requests =
+                serviceRequestRepository.findServiceRequestsByProposedDateRange(startDate, endDate);
+
+        if (requests.isEmpty()) {
+            throw new ApiException("No service requests found within the specified date range");
+        }
+
+        List<ServiceRequestDTOOut> dtoOuts = new ArrayList<>();
+        for (ServiceRequest request : requests) {
+            dtoOuts.add(convertToDTOOut(request));
+        }
+
+        return dtoOuts;
+    }
+
+    public List<ServiceRequestDTOOut> getServiceRequestsByTokenRange(Double minAmount, Double maxAmount) {
+        if (minAmount == null || maxAmount == null) {
+            throw new ApiException("Minimum and maximum token amounts cannot be null");
+        }
+
+        if (minAmount < 0 || maxAmount < 0) {
+            throw new ApiException("Token amounts cannot be negative");
+        }
+
+        if (minAmount > maxAmount) {
+            throw new ApiException("Minimum amount cannot be greater than maximum amount");
+        }
+
+        List<ServiceRequest> requests =
+                serviceRequestRepository.findServiceRequestsByTokenAmountRange(minAmount, maxAmount);
+
+        if (requests.isEmpty()) {
+            throw new ApiException("No service requests found within the specified token range");
+        }
+
+        List<ServiceRequestDTOOut> dtoOuts = new ArrayList<>();
+        for (ServiceRequest request : requests) {
+            dtoOuts.add(convertToDTOOut(request));
+        }
+
+        return dtoOuts;
+    }
+
+    public List<ServiceRequestDTOOut> getServiceRequestsSortedByTokenAmount(String order) {
+        List<ServiceRequest> requests;
+
+        if (order == null || order.trim().isEmpty()) {
+            throw new ApiException("Sort order cannot be empty. Use 'ASC' or 'DESC'");
+        }
+
+        if (order.equalsIgnoreCase("ASC")) {
+            requests = serviceRequestRepository.findAllByOrderByTokenAmountAsc();
+        } else if (order.equalsIgnoreCase("DESC")) {
+            requests = serviceRequestRepository.findAllByOrderByTokenAmountDesc();
+        } else {
+            throw new ApiException("Invalid sort order. Use 'ASC' or 'DESC'");
+        }
+
+        if (requests.isEmpty()) {
+            throw new ApiException("No service requests found");
+        }
+
+        List<ServiceRequestDTOOut> dtoOuts = new ArrayList<>();
+        for (ServiceRequest request : requests) {
+            dtoOuts.add(convertToDTOOut(request));
+        }
+
+        return dtoOuts;
+    }
+
+
+    public List<ServiceRequestDTOOut> getOpenServiceRequestOfCompany(Integer companyid){
+        CompanyProfile company = companyProfileRepository.findCompanyProfileById(companyid);
+
+        if (company == null)
+            throw new ApiException("company not found");
+
+        List<ServiceRequestDTOOut> dtoOuts = new ArrayList<>();
+        for (ServiceRequest request:
+                serviceRequestRepository.findServiceRequestsByCompanyProfileAndStatus(company, "OPEN")) {
+            dtoOuts.add(convertToDTOOut(request));
+        }
+
+        if(dtoOuts.isEmpty()){
+            throw new ApiException("no requests found");
+        }
+
+        return dtoOuts;
+    }
+
+    public List<ServiceRequestDTOOut> getClosedServiceRequestOfCompany(Integer companyid){
+        CompanyProfile company = companyProfileRepository.findCompanyProfileById(companyid);
+
+        if (company == null)
+            throw new ApiException("company not found");
+
+        List<ServiceRequestDTOOut> dtoOuts = new ArrayList<>();
+        for (ServiceRequest request:
+                serviceRequestRepository.findServiceRequestsByCompanyProfileAndStatus(company, "CLOSED")) {
+            dtoOuts.add(convertToDTOOut(request));
+        }
+
+        if(dtoOuts.isEmpty()){
+            throw new ApiException("no requests found");
+        }
+
+        return dtoOuts;
+    }
+
+    public List<ServiceRequestDTOOut> getCancelledServiceRequestOfCompany(Integer companyid){
+        CompanyProfile company = companyProfileRepository.findCompanyProfileById(companyid);
+
+        if (company == null)
+            throw new ApiException("company not found");
+
+        List<ServiceRequestDTOOut> dtoOuts = new ArrayList<>();
+        for (ServiceRequest request:
+                serviceRequestRepository.findServiceRequestsByCompanyProfileAndStatus(company, "CANCELLED")) {
+            dtoOuts.add(convertToDTOOut(request));
+        }
+
+        if(dtoOuts.isEmpty()){
+            throw new ApiException("no requests found");
+        }
+
+        return dtoOuts;
     }
 
 
