@@ -24,6 +24,9 @@ public class CreditTransaction {
     @Column(name = "created_at", columnDefinition = "timestamp not null")
     private LocalDateTime createdAt;
 
+    @Column(columnDefinition = "varchar(20) not null check(status = 'PENDING' or status='ACCEPTED' or status='CANCELED')")
+    private String status;
+
     @OneToOne
     @JoinColumn(name = "contract_agreement_id", nullable = false, unique = true)
     private ContractAgreement contractAgreement;

@@ -4,8 +4,10 @@ import com.v1.manfaa.Api.ApiException;
 import com.v1.manfaa.DTO.Out.CompanyProfileDTOOut;
 import com.v1.manfaa.DTO.Out.CreditTransactionDTOOut;
 import com.v1.manfaa.Model.CompanyProfile;
+import com.v1.manfaa.Model.ContractAgreement;
 import com.v1.manfaa.Model.CreditTransaction;
 import com.v1.manfaa.Model.User;
+import com.v1.manfaa.Repository.ContractAgreementRepository;
 import com.v1.manfaa.Repository.CreditTransactionRepository;
 import com.v1.manfaa.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ public class CreditTransactionService {
 
     private final CreditTransactionRepository transactionRepository;
     private final UserRepository userRepository;
+    private final ContractAgreementRepository contractAgreementRepository;
 
     public List<CreditTransactionDTOOut> getAllTransactions() {
         return convertToDtoOut(transactionRepository.findAll());
@@ -41,6 +44,18 @@ public class CreditTransactionService {
         List<CreditTransaction> transactions = transactionRepository
                 .findByPayingCompanyIdOrPaidCompanyId(companyId, companyId);
         return convertToDtoOut(transactions);
+    }
+
+    public void refundCredit(Integer contractId){
+        ContractAgreement contractAgreement = contractAgreementRepository.findContractAgreementById(contractId);
+
+        if(contractAgreement == null){
+            throw new ApiException("no contract found");
+        }
+
+        if(!contractAgreement.getStatus().equalsIgnoreCase("COMPLETED")){
+            throw new ApiException("contract is not yet closed");
+        }
     }
 
     public List<CreditTransactionDTOOut> convertToDtoOut(List<CreditTransaction> transactions) {
