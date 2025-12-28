@@ -3,10 +3,10 @@ package com.v1.manfaa.Service;
 import com.v1.manfaa.Api.ApiException;
 import com.v1.manfaa.DTO.In.CompanyProfileDTOIn;
 import com.v1.manfaa.DTO.In.RegisterDTOIn;
+import com.v1.manfaa.DTO.Out.CompanyFullInfoDTOOut;
 import com.v1.manfaa.DTO.Out.CompanyProfileDTOOut;
-import com.v1.manfaa.Model.CompanyCredit;
-import com.v1.manfaa.Model.CompanyProfile;
-import com.v1.manfaa.Model.User;
+import com.v1.manfaa.DTO.Out.SkillsDTOOut;
+import com.v1.manfaa.Model.*;
 import com.v1.manfaa.Repository.CompanyCreditRepository;
 import com.v1.manfaa.Repository.CompanyProfileRepository;
 import com.v1.manfaa.Repository.UserRepository;
@@ -16,7 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -63,6 +65,8 @@ public class CompanyProfileService {
         company.setUser(user);
         user.setCompanyProfile(company);
         userRepository.save(user);
+        companyProfileRepository.save(company);
+        companyCreditRepository.save(companyCredit);
     }
 
     public void updateCompanyProfile(Integer companyProfileId, CompanyProfileDTOIn dto) {
@@ -98,6 +102,47 @@ public class CompanyProfileService {
         userRepository.delete(user);
     }
 
+    public List<CompanyFullInfoDTOOut> getAllCompaniesFullDetails(){
+        List<CompanyFullInfoDTOOut> dtoOuts = new ArrayList<>();
+        for(CompanyProfile c : companyProfileRepository.findAll()){
+            dtoOuts.add(convertCompanyFull(c));
+        }
+        return dtoOuts;
+    }
+
+    public CompanyFullInfoDTOOut getCompanyDetails(Integer id){
+        CompanyProfile companyProfile = companyProfileRepository.findCompanyProfileById(id);
+        if(companyProfile != null){
+            return convertCompanyFull(companyProfile);
+        }
+        else return new CompanyFullInfoDTOOut(null,null,null,null,
+                null,null,null,null,null);
+    }
+
+    public CompanyFullInfoDTOOut convertCompanyFull(CompanyProfile c){
+        return new CompanyFullInfoDTOOut(c.getName(),c.getIndustry(),c.getTeamSize(),c.getDescription(),c.getCreatedAt(),
+                c.getIsSubscriber(),convertSkillsToDto(c.getSkills()),getAvgReviews(c),c.getReceivedReviews().size());
+    }
+
+    public Double getAvgReviews(CompanyProfile companyProfile){
+        Double avg = 0.0;
+        Double count = 0.0;
+        for(Review review : companyProfile.getReceivedReviews()){
+            count += review.getRating();
+        }
+        if(!count.equals(0.0)){
+            avg = count / (long) companyProfile.getReceivedReviews().size();
+        }
+        return avg;
+    }
+
+    public List<SkillsDTOOut> convertSkillsToDto(Set<Skills> skills){
+        List<SkillsDTOOut> dtoOuts = new ArrayList<>();
+        for(Skills s : skills){
+            dtoOuts.add(new SkillsDTOOut(s.getName(),s.getDescription()));
+        }
+        return dtoOuts;
+    }
 
     public List<CompanyProfileDTOOut> convertToDtoOut(List<CompanyProfile> profiles) {
         return profiles.stream()

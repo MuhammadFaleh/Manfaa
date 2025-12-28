@@ -28,7 +28,7 @@ public class AuthService {
         UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getUsername());
         String token = jwtService.generateToken(userDetails);
         addJwtCookie(response, token);
-        return new LoginResponse(token, "Bearer", userDetails.getUsername(),
+        return new LoginResponse(token,  userDetails.getUsername(),"Bearer",
                 "Login successful");
 
     }

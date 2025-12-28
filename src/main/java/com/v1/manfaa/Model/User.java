@@ -30,7 +30,7 @@ public class User implements UserDetails {
     @Column(columnDefinition = "varchar(255) not null")
     private String password;
 
-    @Column(columnDefinition = "varchar(255) not null unique ")
+    @Column(columnDefinition = "varchar(255) not null unique")
     private String email;
 
     @Column(columnDefinition = "varchar(255) not null")

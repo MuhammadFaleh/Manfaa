@@ -6,10 +6,6 @@ import lombok.Data;
 @AllArgsConstructor
 @Data
 public class SkillsDTOOut {
-
-
-
     private String name;
-
     private  String description;
 }

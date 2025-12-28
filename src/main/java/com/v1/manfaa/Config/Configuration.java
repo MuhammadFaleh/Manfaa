@@ -40,7 +40,8 @@ public class Configuration {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList(//react url once we add it));
+        configuration.setAllowedOrigins(Arrays.asList(//react url once we add it
+                ));
 
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
 
@@ -60,13 +61,16 @@ public class Configuration {
                 .authorizeHttpRequests(auth -> auth
                         // Public endpoints
                         .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers("/api/v1/company/register").permitAll()
                         .requestMatchers("/api/v1/users/add").permitAll()
 
                         // admin endpoints
                         .requestMatchers("/api/v1/service-request/get-requests").hasAuthority("ADMIN")
+                        .requestMatchers("/api/v1/company/get-all","/api/v1/company/get-companies-full").hasAuthority("ADMIN")
 
                         // company endpoints
                         .requestMatchers("/api/v1/service-request/create-request").hasAuthority("COMPANY")
+                        .requestMatchers("/api/v1/company/**").hasAuthority("COMPANY")
 
                         // subscription endpoints
                         .requestMatchers("/api/v1/subscriptions/**").hasAuthority("COMPANY")

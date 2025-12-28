@@ -22,27 +22,37 @@ public class CompanyProfileController {
     private final CompanyProfileService companyService;
 
     @GetMapping("/get-all")
-    public ResponseEntity<?> getAllCompanies() {
-        return ResponseEntity.ok(companyService.getAllCompanyProfiles());
+    public ResponseEntity<?> getAllCompanies(@AuthenticationPrincipal User user) {
+        return ResponseEntity.status(200).body(companyService.getAllCompanyProfiles());
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> registerCompany(@Valid @RequestBody RegisterDTOIn dto) {
         companyService.registerCompany(dto);
-        return ResponseEntity.ok(new ApiResponse("Company Registered Successfully"));
+        return ResponseEntity.status(200).body(new ApiResponse("Company Registered Successfully"));
     }
 
-    @PutMapping("/update/{companyProfileId}")
-    public ResponseEntity<?> updateCompanyProfile(@PathVariable Integer companyProfileId,
-                                                  @Valid @RequestBody CompanyProfileDTOIn dto) {
-        companyService.updateCompanyProfile(companyProfileId, dto);
-        return ResponseEntity.ok(new ApiResponse("Company Updated Successfully"));
+    @PutMapping("/update")
+    public ResponseEntity<?> updateCompanyProfile(@Valid @RequestBody CompanyProfileDTOIn dto,
+                                                  @AuthenticationPrincipal User user) {
+        companyService.updateCompanyProfile(user.getId(), dto);
+        return ResponseEntity.status(200).body(new ApiResponse("Company Updated Successfully"));
     }
 
-    @DeleteMapping("/delete/{companyProfileId}")
-    public ResponseEntity<?> deleteCompanyProfile(@PathVariable Integer companyProfileId) {
-        companyService.deleteCompanyProfile(companyProfileId);
-        return ResponseEntity.ok(new ApiResponse("Company Deleted Successfully"));
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteCompanyProfile(@AuthenticationPrincipal User user) {
+        companyService.deleteCompanyProfile(user.getId());
+        return ResponseEntity.status(200).body(new ApiResponse("Company Deleted Successfully"));
+    }
+
+    @GetMapping("/get-companies-full")
+    public ResponseEntity<?> getCompaniesFull(@AuthenticationPrincipal User user){
+        return ResponseEntity.status(200).body(companyService.getAllCompaniesFullDetails());
+    }
+
+    @GetMapping("/get-company-full")
+    public ResponseEntity<?> getCompanyFull(@AuthenticationPrincipal User user){
+        return ResponseEntity.status(200).body(companyService.getCompanyDetails(user.getId()));
     }
 }
 
