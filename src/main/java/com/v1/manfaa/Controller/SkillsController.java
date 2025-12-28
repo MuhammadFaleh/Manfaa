@@ -6,10 +6,12 @@ import com.v1.manfaa.DTO.In.SkillsDTOIn;
 import com.v1.manfaa.DTO.Out.SkillsDTOOut;
 import com.v1.manfaa.DTO.Out.UserDTOOut;
 import com.v1.manfaa.Model.Skills;
+import com.v1.manfaa.Model.User;
 import com.v1.manfaa.Service.SkillsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,7 +45,20 @@ public class SkillsController {
         skillsService.deleteSkills(companyProfileId, skillsId);
         return ResponseEntity.status(200).body(new ApiResponse("Skills deleted"));
     }
+
+
+    @GetMapping("/company/{companyId}")
+    public ResponseEntity<List<SkillsDTOOut>> getSkillsByCompany(@PathVariable Integer companyId,@AuthenticationPrincipal User user) {
+        return ResponseEntity.status(200).body(skillsService.getSkillsByCompany(companyId));
+    }
+
+
+    @GetMapping("/search/{keyword}")
+    public ResponseEntity<List<SkillsDTOOut>> searchSkillsByKeyword(@PathVariable String keyword, @AuthenticationPrincipal User user) {
+        return ResponseEntity.status(200).body(skillsService.searchSkillsByKeyword(keyword));
+    }
 }
+
 
 
 

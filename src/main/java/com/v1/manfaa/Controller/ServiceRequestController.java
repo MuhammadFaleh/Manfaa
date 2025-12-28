@@ -26,8 +26,7 @@ public class ServiceRequestController {
 
 
     @PostMapping("/create-request")
-    public ResponseEntity<?> createRequests(@Valid @RequestBody ServiceRequestDTOIn dtoIn,
-                                            @AuthenticationPrincipal User user){
+    public ResponseEntity<?> createRequests(@Valid @RequestBody ServiceRequestDTOIn dtoIn, @AuthenticationPrincipal User user){
         serviceRequestService.createTokenRequest(dtoIn,user.getId());
         return ResponseEntity.status(200).body(new ApiResponse("request created successfully"));
     }
