@@ -24,37 +24,38 @@ public class SubscriptionService {
     public List<SubscriptionDTOOut> convertToDtoOut(List<Subscription> subscriptions) {
         return subscriptions.stream()
                 .map(subscription -> new SubscriptionDTOOut(
-                       subscription.getStartDate(),
+                        subscription.getStartDate(),
                         subscription.getEndDate(),
                         subscription.getIsActive()
                 ))
                 .toList();
     }
-    public List<SubscriptionDTOOut>getAllSubscription(){
+
+    public List<SubscriptionDTOOut> getAllSubscription() {
         return convertToDtoOut(subscriptionRepository.findAll());
     }
 
 
+    public void monthlySubscription(Integer companyProfileId) {
+        CompanyProfile companyProfile = companyProfileRepository.findCompanyProfileById(companyProfileId);
+        Subscription issubscription = subscriptionRepository.findSubscriptionByCompanyProfileIdAndIsActive(companyProfileId, true);
 
-    public void MonthlySubscription(Integer companyProfileId){
-      CompanyProfile companyProfile =  companyProfileRepository.findCompanyProfileById(companyProfileId);
-      Subscription issubscription = subscriptionRepository.findSubscriptionByCompanyProfileIdAndIsActive(companyProfileId,true);
+        if (companyProfile == null) {
+            throw new ApiException("companyProfile not found");
+        }
+        if (issubscription != null) {
+            throw new ApiException("Subscription Already valid ");
+        }
 
-      if(companyProfile == null){
-          throw new ApiException("companyProfile not found");
-      }
-      if(issubscription!= null){
-          throw new ApiException("Subscription Already valid ");
-      }
-
-      Subscription subscription = new Subscription(null,LocalDate.now(),LocalDate.now().plusMonths(1),true,companyProfile);
+        Subscription subscription = new Subscription(null, LocalDate.now(), LocalDate.now().plusMonths(1), true, companyProfile);
 
         companyProfile.getSubscription().add(subscription);
         companyProfile.setIsSubscriber(true);
 
+
         subscription.setCompanyProfile(companyProfile);
-      subscriptionRepository.save(subscription);
-      companyProfileRepository.save(companyProfile);
+        subscriptionRepository.save(subscription);
+        companyProfileRepository.save(companyProfile);
 
 
 
@@ -62,17 +63,17 @@ public class SubscriptionService {
     }
 
 
-    public void YearlySubscription(Integer companyProfileId){
-        CompanyProfile companyProfile =  companyProfileRepository.findCompanyProfileById(companyProfileId);
-        Subscription issubscription = subscriptionRepository.findSubscriptionByCompanyProfileIdAndIsActive(companyProfileId,true);
-        if(companyProfile == null){
+    public void yearlySubscription(Integer companyProfileId) {
+        CompanyProfile companyProfile = companyProfileRepository.findCompanyProfileById(companyProfileId);
+        Subscription issubscription = subscriptionRepository.findSubscriptionByCompanyProfileIdAndIsActive(companyProfileId, true);
+        if (companyProfile == null) {
             throw new ApiException("companyProfile not found");
         }
-        if(issubscription!=null){
+        if (issubscription != null) {
             throw new ApiException("Subscription Already valid");
         }
 
-        Subscription subscription = new Subscription(null,LocalDate.now(),LocalDate.now().plusYears(1),true,companyProfile);
+        Subscription subscription = new Subscription(null, LocalDate.now(), LocalDate.now().plusYears(1), true, companyProfile);
 
         companyProfile.getSubscription().add(subscription);
         companyProfile.setIsSubscriber(true);
@@ -83,7 +84,25 @@ public class SubscriptionService {
 
     }
 
+    public void cancelSubscription(Integer companyId ,Integer subscriptionId) {
+        Subscription subscription = subscriptionRepository.findSubscriptionById(subscriptionId);
+        CompanyProfile companyProfile = companyProfileRepository.findCompanyProfileById(companyId);
 
+        if (subscription == null) {
+            throw new ApiException("Subscription not found");
+        }
+        if(companyProfile == null){
+            throw new ApiException("Company not found");
+        }
+        if (!subscription.getIsActive()) {
+            throw new ApiException("Subscription is already inactive");
+        }
 
+        subscription.setIsActive(false);
+        companyProfile.setIsSubscriber(false);
+
+        subscriptionRepository.save(subscription);
+        companyProfileRepository.save(companyProfile);
+    }
 
 }
