@@ -54,5 +54,10 @@ public class CompanyProfileController {
     public ResponseEntity<?> getCompanyFull(@AuthenticationPrincipal User user){
         return ResponseEntity.status(200).body(companyService.getCompanyDetails(user.getId()));
     }
+
+    @GetMapping("/get-company-id-full/{companyId}")
+    public ResponseEntity<?> getCompanyByIdFull(@PathVariable Integer companyId, @AuthenticationPrincipal User user){
+        return ResponseEntity.status(200).body(companyService.getCompanyById(companyId));
+    }
 }
 

@@ -41,7 +41,7 @@ public class ContractAgreement {
     @Column(name = "closed_at", columnDefinition = "timestamp")
     private LocalDateTime closedAt;
     @Column(name = "first_party_agreement", columnDefinition = "varchar(20) not null check(first_party_agreement= 'PENDING' or " +
-            "first_party_agreement = 'ACCEPTED' or first_party_agreement='REJECTED' or" +
+            "first_party_agreement = 'ACCEPTED' or first_party_agreement='REJECTED' or " +
             "first_party_agreement='DELIVERED')")
     private String firstPartyAgreement;
     @Column(name = "second_party_agreement", columnDefinition = "varchar(20) not null check(second_party_agreement= 'PENDING' or " +

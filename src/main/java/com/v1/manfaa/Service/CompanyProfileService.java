@@ -157,4 +157,8 @@ public class CompanyProfileService {
                 ))
                 .toList();
     }
+
+    public CompanyFullInfoDTOOut getCompanyById(Integer id){
+        return convertCompanyFull(companyProfileRepository.findCompanyProfileById(id));
+    }
 }

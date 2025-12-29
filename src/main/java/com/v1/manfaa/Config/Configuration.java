@@ -64,21 +64,26 @@ public class Configuration {
                         .requestMatchers("/api/v1/company/register").permitAll()
                         .requestMatchers("/api/v1/users/add").permitAll()
 
+                        .requestMatchers("/api/v1/transaction/get-my-transactions").hasAuthority("COMPANY")
+
                         // admin endpoints
                         .requestMatchers("/api/v1/service-bid/get-all").hasAuthority("ADMIN")
+                        .requestMatchers("/api/v1/transaction/**").hasAuthority("ADMIN")
                         .requestMatchers("/api/v1/company/get-all","/api/v1/company/get-companies-full").hasAuthority("ADMIN")
                         .requestMatchers("/api/v1/contract/get-all").hasAuthority("ADMIN")
                         .requestMatchers("/api/v1/category/add/**", "/api/v1/category/update/**", "/api/v1/category/delete/**").hasAuthority("ADMIN")
                         .requestMatchers("/api/v1/skills/update/**", "/api/v1/skills/add", "/api/v1/skills/delete/**").hasAuthority("ADMIN")
 
                         // company endpoints
-                        .requestMatchers("/api/v1/service-request/create-request").hasAuthority("COMPANY")
+                        .requestMatchers("/api/v1/service-request/create-token-request").hasAuthority("COMPANY")
                         .requestMatchers("/api/v1/service-request/get-requests").hasAuthority("COMPANY")
+                        .requestMatchers("/api/v1/service-request/get-with-bids/**").hasAuthority("COMPANY")
                         .requestMatchers("/api/v1/company/**").hasAuthority("COMPANY")
                         .requestMatchers("/api/v1/service-bid/**").hasAuthority("COMPANY")
                         .requestMatchers("/api/v1/contract/**").hasAuthority("COMPANY")
                         .requestMatchers("/api/v1/category/get").hasAuthority("COMPANY")
                         .requestMatchers("/api/v1/skills/**").hasAuthority("COMPANY")
+                        .requestMatchers("/api/v1/service-request/**").hasAuthority("COMPANY")
 
                         // subscription endpoints
                         .requestMatchers("/api/v1/subscriptions/**").hasAuthority("COMPANY")

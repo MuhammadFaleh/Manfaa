@@ -25,12 +25,7 @@ public class CreditTransactionService {
     }
 
     public List<CreditTransactionDTOOut> getCompanyTransactionsForAdmin(Integer adminId, Integer companyId) {
-        User admin = userRepository.findById(adminId)
-                .orElseThrow(() -> new ApiException("Admin not found"));
-
-        if (!"ADMIN".equals(admin.getRole())) {
-            throw new ApiException("Unauthorized: User is not an admin");
-        }
+        userRepository.findById(adminId).orElseThrow(() -> new ApiException("Admin not found"));
 
         List<CreditTransaction> transactions = transactionRepository
                 .findByPayingCompanyIdOrPaidCompanyId(companyId, companyId);
@@ -50,7 +45,8 @@ public class CreditTransactionService {
             throw new ApiException("no contract found");
         }
 
-        if(!contractAgreement.getStatus().equalsIgnoreCase("COMPLETED")){
+        if(!contractAgreement.getStatus().equalsIgnoreCase("COMPLETED") &&
+                !contractAgreement.getStatus().equalsIgnoreCase("DISPUTED")){
             throw new ApiException("contract is not yet closed");
         }
         if(!contractAgreement.getExchangeType().equalsIgnoreCase("TOKENS")){
@@ -66,6 +62,16 @@ public class CreditTransactionService {
         transactionRepository.save(contractAgreement.getCreditTransaction());
         companyCreditRepository.save(companyProfile.getCompanyCredit());
         companyProfileRepository.save(companyProfile);
+    }
+
+    public void addCreditToUser(Integer userId, Double amount){
+        CompanyProfile companyProfile = companyProfileRepository.findCompanyProfileById(userId);
+
+        if(companyProfile != null){
+            throw new ApiException("company not found");
+        }
+        companyProfile.getCompanyCredit().setBalance(companyProfile.getCompanyCredit().getBalance() + amount);
+        companyCreditRepository.save(companyProfile.getCompanyCredit());
     }
 
     public List<CreditTransactionDTOOut> convertToDtoOut(List<CreditTransaction> transactions) {
