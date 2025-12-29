@@ -33,6 +33,10 @@ public class RegisterDTOIn {
     )
     private String phoneNumber;
 
+    @NotBlank(message = "record number is required")
+    @Size(max = 10, min = 10, message = "record number must be 10 characters long")
+    private String recordNumber;
+
     @NotBlank(message = "company name is required")
     @Size(max = 20, message = "company name must be at most 20 characters")
     private String companyName;

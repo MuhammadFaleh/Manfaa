@@ -28,28 +28,40 @@ public class SkillsController {
         return ResponseEntity.status(200).body(skillsService.getAllSkills());
     }
 
-    @PostMapping("/add/{companyProfileId}")
-    public ResponseEntity<?> addSkills(@PathVariable Integer companyProfileId, @RequestBody @Valid SkillsDTOIn skillsDTOIn){
-        skillsService.addSkills(companyProfileId, skillsDTOIn);
+    @PostMapping("/add")
+    public ResponseEntity<?> addSkills(@RequestBody @Valid SkillsDTOIn skillsDTOIn, @AuthenticationPrincipal User user){
+        skillsService.addSkills(skillsDTOIn);
         return ResponseEntity.status(200).body(new ApiResponse("Skills added"));
     }
 
-    @PutMapping("/update/{skillsId}/{companyProfileId}")
-    public ResponseEntity<?> updateSkills(@PathVariable Integer skillsId, @PathVariable Integer companyProfileId, @RequestBody @Valid SkillsDTOIn skillsDTOIn){
-        skillsService.updateSkills(skillsId, companyProfileId, skillsDTOIn);
+    @PutMapping("/update/{skillsId}")
+    public ResponseEntity<?> updateSkills(@PathVariable Integer skillsId, @RequestBody @Valid SkillsDTOIn skillsDTOIn, @AuthenticationPrincipal User user){
+        skillsService.updateSkills(skillsId, skillsDTOIn);
         return ResponseEntity.status(200).body(new ApiResponse("Skills updated"));
     }
 
-    @DeleteMapping("/delete/{companyProfileId}/{skillsId}")
-    public  ResponseEntity<?> deleteSkills(@PathVariable Integer companyProfileId, @PathVariable Integer skillsId){
-        skillsService.deleteSkills(companyProfileId, skillsId);
+    @DeleteMapping("/delete/{skillsId}")
+    public  ResponseEntity<?> deleteSkills(@PathVariable Integer skillsId, @AuthenticationPrincipal User user){
+        skillsService.deleteSkills(skillsId);
         return ResponseEntity.status(200).body(new ApiResponse("Skills deleted"));
     }
 
+    @PostMapping("/assign-skill/{skillId}")
+    public ResponseEntity<?> assignSkill(@PathVariable Integer skillId, @AuthenticationPrincipal User user){
+        skillsService.assignSkill(user.getId(),skillId);
+        return ResponseEntity.status(200).body(new ApiResponse("skill added successfully"));
+    }
 
-    @GetMapping("/company/{companyId}")
-    public ResponseEntity<List<SkillsDTOOut>> getSkillsByCompany(@PathVariable Integer companyId,@AuthenticationPrincipal User user) {
-        return ResponseEntity.status(200).body(skillsService.getSkillsByCompany(companyId));
+    @PostMapping("/remove-skill/{skillId}")
+    public ResponseEntity<?> removeSkill(@PathVariable Integer skillId, @AuthenticationPrincipal User user){
+        skillsService.removeSkill(user.getId(),skillId);
+        return ResponseEntity.status(200).body(new ApiResponse("skill removed successfully"));
+    }
+
+
+    @GetMapping("/get-skills")
+    public ResponseEntity<List<SkillsDTOOut>> getSkillsByCompany(@AuthenticationPrincipal User user) {
+        return ResponseEntity.status(200).body(skillsService.getSkillsByCompany(user.getId()));
     }
 
 

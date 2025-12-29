@@ -43,7 +43,12 @@ public class CompanyProfile {
     @JoinColumn(name = "user_id", unique = true)
     private User user;
 
-    @OneToMany(cascade = CascadeType.ALL , mappedBy = "companyProfile")
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "company_skills",
+            joinColumns = @JoinColumn(name = "company_id"),
+            inverseJoinColumns = @JoinColumn(name = "skill_id")
+    )
     private Set<Skills> skills;
 
     @OneToMany(mappedBy = "reviewerProfile")

@@ -57,12 +57,13 @@ public class CompanyProfileService {
         company.setIsSubscriber(false);
 
         CompanyCredit companyCredit = new CompanyCredit();
-        companyCredit.setBalance(0);
-        companyCredit.setTotalEarned(0);
-        companyCredit.setTotalSpent(0);
+        companyCredit.setBalance(0.0);
+        companyCredit.setTotalEarned(0.0);
+        companyCredit.setTotalSpent(0.0);
 
         company.setCompanyCredit(companyCredit);
         company.setUser(user);
+        user.setRecordNumber(dto.getRecordNumber());
         user.setCompanyProfile(company);
         userRepository.save(user);
         companyProfileRepository.save(company);
@@ -155,5 +156,9 @@ public class CompanyProfileService {
                         profile.getIsSubscriber()
                 ))
                 .toList();
+    }
+
+    public CompanyFullInfoDTOOut getCompanyById(Integer id){
+        return convertCompanyFull(companyProfileRepository.findCompanyProfileById(id));
     }
 }

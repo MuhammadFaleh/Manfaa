@@ -4,6 +4,7 @@ import com.v1.manfaa.Api.ApiException;
 import com.v1.manfaa.DTO.In.ServiceBidDTOIn;
 import com.v1.manfaa.DTO.Out.ServiceBidDTOOut;
 import com.v1.manfaa.Model.CompanyProfile;
+import com.v1.manfaa.Model.ContractAgreement;
 import com.v1.manfaa.Model.ServiceBid;
 import com.v1.manfaa.Model.ServiceRequest;
 import com.v1.manfaa.Repository.CategoryRepository;
@@ -13,7 +14,9 @@ import com.v1.manfaa.Repository.ServiceRequestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +27,7 @@ public class ServiceBidService {
     private final CompanyProfileRepository companyProfileRepository;
     private final CategoryRepository categoryRepository;
     private final ServiceBidRepository serviceBidRepository;
+    private final EmailService emailService;
 
     public List<ServiceBidDTOOut> getAllBids(){
         List<ServiceBidDTOOut> dtoOuts = new ArrayList<>();
@@ -47,6 +51,12 @@ public class ServiceBidService {
 
         if(!serviceRequest.getStatus().equalsIgnoreCase("OPEN")){
             throw new ApiException("service request is closed or canceled and can't take any new bids");
+        }
+
+        if(dtoIn.getProposedStartDate().isAfter(dtoIn.getProposedEndDate()) ||
+                ChronoUnit.HOURS.between(dtoIn.getProposedStartDate(), dtoIn.getProposedEndDate()) <
+                        dtoIn.getEstimatedHours()){
+            throw new ApiException("wrong dates expected hours and date don't make sense");
         }
 
         ServiceBid bid = convertToEntity(dtoIn);
@@ -109,7 +119,68 @@ public class ServiceBidService {
         serviceBidRepository.delete(bid);
     }
 
-    //Todo: accept reject logic
+    public void acceptServiceBid(Integer serviceBidId, Integer userId){
+        CompanyProfile companyProfile = companyProfileRepository.findCompanyProfileById(userId);
+        ServiceBid serviceBid = serviceBidRepository.findServiceBidById(serviceBidId);
+
+        if(companyProfile == null || serviceBid == null ||
+                !serviceBid.getServiceRequest().getCompanyProfile().getId().equals(userId)){
+            throw new ApiException("service bid not found");
+        }
+        ServiceRequest serviceRequest = serviceBid.getServiceRequest();
+        if(!serviceRequest.getStatus().equalsIgnoreCase("OPEN")
+                || !serviceBid.getStatus().equalsIgnoreCase("PENDING")){
+            throw new ApiException("service bid or request is already closed");
+        }
+
+
+
+        serviceRequest.setStatus("CLOSED");
+        serviceBid.setStatus("ACCEPTED");
+        serviceRequestRepository.save(serviceRequest);
+        serviceBidRepository.save(serviceBid);
+
+
+
+    }
+
+    public void rejectServiceBid(Integer serviceBidId, Integer userId, String notes){
+        CompanyProfile companyProfile = companyProfileRepository.findCompanyProfileById(userId);
+        ServiceBid serviceBid = serviceBidRepository.findServiceBidById(serviceBidId);
+
+        if(companyProfile == null || serviceBid == null ||
+                !serviceBid.getServiceRequest().getCompanyProfile().getId().equals(userId)){
+            throw new ApiException("service bid not found");
+        }
+        ServiceRequest serviceRequest = serviceBid.getServiceRequest();
+        if(!serviceRequest.getStatus().equalsIgnoreCase("OPEN")
+                || !serviceBid.getStatus().equalsIgnoreCase("PENDING")){
+            throw new ApiException("service bid or request is already closed");
+        }
+
+        // send an email
+
+        String recipientEmail = serviceBid.getCompanyProfile().getUser().getEmail();
+        String subject = "Service Bid Rejected";
+
+        String message = "Dear " + serviceBid.getCompanyProfile().getName() + ",\n\n"
+                + "We would like to inform you that your service bid for the request titled \""
+                + serviceRequest.getTitle() + "\" has been rejected by the service requester.\n\n"
+                +"Notes given by the service requester: " + notes
+                + "Thank you for your interest and for submitting your bid. "
+                + "You are welcome to apply for other service requests available on the platform.\n\n"
+                + "Kind regards,\n"
+                + "Support Team";
+
+        emailService.sendEmail(recipientEmail, subject, message);
+
+        serviceBid.setNotes(notes);
+        serviceBid.setStatus("REJECTED");
+        serviceBidRepository.save(serviceBid);
+
+
+
+    }
 
 
     public ServiceBid convertToEntity(ServiceBidDTOIn dtoIn){

@@ -36,11 +36,14 @@ public class User implements UserDetails {
     @Column(columnDefinition = "varchar(255) not null")
     private String fullName;
 
-    @Column(columnDefinition = "varchar(255) not null")
+    @Column(columnDefinition = "varchar(15) not null unique")
     private String phone_Number;
 
+    @Column(columnDefinition = "varchar(10) not null")
+    private String recordNumber;
 
-    @Column(columnDefinition = "varchar(255) not null")
+
+    @Column(columnDefinition = "varchar(20) not null")
     private String role;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)

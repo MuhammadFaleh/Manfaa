@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
+
 @AllArgsConstructor
 @Entity
 @Setter
@@ -17,15 +19,15 @@ public class Skills {
 @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-@Column(columnDefinition = "varchar (255) not null")
+@Column(columnDefinition = "varchar (255) not null unique")
     private String name;
 
 @Column(columnDefinition = "text not null")
     private  String description;
 
-    @ManyToOne
+    @ManyToMany(mappedBy = "skills")
     @JsonIgnore
-    private CompanyProfile companyProfile;
+    private Set<CompanyProfile> companyProfile;
 
 
 }

@@ -20,14 +20,14 @@ public class CompanyCredit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(columnDefinition = "int default 0")
-    private Integer balance;
+    @Column(columnDefinition = "Double default 0")
+    private Double balance;
 
-    @Column(name = "total_spent", columnDefinition = "int default 0")
-    private Integer totalSpent;
+    @Column(name = "total_spent", columnDefinition = "Double default 0")
+    private Double totalSpent;
 
-    @Column(name = "total_earned", columnDefinition = "int default 0")
-    private Integer totalEarned;
+    @Column(name = "total_earned", columnDefinition = "Double default 0")
+    private Double totalEarned;
 
     @OneToMany(mappedBy = "payingCompany")
     private Set<CreditTransaction> outgoingTransactions;

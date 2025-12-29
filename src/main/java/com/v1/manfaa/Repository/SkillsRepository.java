@@ -12,6 +12,7 @@ import java.util.List;
 public interface SkillsRepository extends JpaRepository<Skills, Integer> {
 
     Skills findSkillsById(Integer id);
+    Skills findSkillsByName(String name);
 
     List<Skills> findAllByCompanyProfile(CompanyProfile companyProfile);
 

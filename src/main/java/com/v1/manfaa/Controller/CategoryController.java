@@ -6,10 +6,12 @@ import com.v1.manfaa.DTO.In.CategoryDTOIn;
 import com.v1.manfaa.DTO.Out.CategoryDTOOut;
 import com.v1.manfaa.DTO.Out.SkillsDTOOut;
 import com.v1.manfaa.Model.Category;
+import com.v1.manfaa.Model.User;
 import com.v1.manfaa.Service.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,21 +28,21 @@ public class CategoryController {
         return ResponseEntity.status(200).body(categoryService.getAllCategory());
     }
 
-    @PostMapping("/add/{userId}")
-    public ResponseEntity<?> addCategory(@PathVariable Integer userId, @RequestBody @Valid  CategoryDTOIn categoryDTOIn) {
-        categoryService.addCategory(userId, categoryDTOIn);
+    @PostMapping("/add")
+    public ResponseEntity<?> addCategory(@RequestBody @Valid  CategoryDTOIn categoryDTOIn, @AuthenticationPrincipal User user) {
+        categoryService.addCategory(user.getId(), categoryDTOIn);
         return ResponseEntity.status(200).body(new ApiResponse("Category added"));
     }
 
-    @PutMapping("/update/{userId}/{categoryId}")
-    public ResponseEntity<?> updateCategory(@PathVariable Integer userId, @PathVariable Integer categoryId, @RequestBody @Valid CategoryDTOIn categoryDTOIn) {
-        categoryService.updateCategory(userId, categoryId, categoryDTOIn);
+    @PutMapping("/update/{categoryId}")
+    public ResponseEntity<?> updateCategory(@PathVariable Integer categoryId, @RequestBody @Valid CategoryDTOIn categoryDTOIn , @AuthenticationPrincipal User user) {
+        categoryService.updateCategory(user.getId(), categoryId, categoryDTOIn);
         return ResponseEntity.status(200).body(new ApiResponse("Category updated"));
     }
 
-    @DeleteMapping("/delete/{userId}/{categoryId}")
-    public ResponseEntity<?> deleteCategory(@PathVariable Integer userId, @PathVariable Integer categoryId) {
-        categoryService.deleteCategory(userId, categoryId);
+    @DeleteMapping("/delete/{categoryId}")
+    public ResponseEntity<?> deleteCategory(@PathVariable Integer categoryId , @AuthenticationPrincipal User user) {
+        categoryService.deleteCategory(user.getId(), categoryId);
         return ResponseEntity.status(200).body(new ApiResponse("Category deleted"));
     }
 }

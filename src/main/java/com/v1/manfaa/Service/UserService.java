@@ -37,7 +37,7 @@ public class UserService {
     public void addUser(UserDTOIn userDtoIn){
         String hash = new BCryptPasswordEncoder().encode(userDtoIn.getPassword());
         User user = new User(null, userDtoIn.getUsername(), hash, userDtoIn.getEmail(), userDtoIn.getFullName(), userDtoIn.getPhone_Number(),
-                "ADMIN",null);
+                null, "ADMIN",null);
 
         userRepository.save(user);
 
