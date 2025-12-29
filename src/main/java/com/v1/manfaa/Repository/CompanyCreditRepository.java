@@ -8,5 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface CompanyCreditRepository extends JpaRepository<CompanyCredit, Integer> {
 
     CompanyCredit findCompanyCreditById(Integer id);
+    CompanyCredit findCompanyCreditByUserId(Integer id);
 
 }

@@ -24,7 +24,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping("/get")
-     public ResponseEntity<List<CategoryDTOOut>> getAllCategory() {
+     public ResponseEntity<?> getAllCategory() {
         return ResponseEntity.status(200).body(categoryService.getAllCategory());
     }
 
