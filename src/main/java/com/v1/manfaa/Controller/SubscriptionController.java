@@ -15,26 +15,26 @@ public class SubscriptionController {
 
     private final SubscriptionService subscriptionService;
 
-    @GetMapping("/get")
-    public ResponseEntity<?> getAllSubscriptions() {
+    @GetMapping("/get") // admin
+    public ResponseEntity<?> getAllSubscriptions(@AuthenticationPrincipal User user) {
         return ResponseEntity.status(200).body(subscriptionService.getAllSubscription());
     }
 
-    @PostMapping("/monthly/{companyProfileId}")
-    public ResponseEntity<ApiResponse> monthlySubscription(@PathVariable Integer companyProfileId) {
-        subscriptionService.monthlySubscription(companyProfileId);
+    @PostMapping("/monthly") // user
+    public ResponseEntity<?> monthlySubscription(@AuthenticationPrincipal User user) {
+        subscriptionService.monthlySubscription(user.getId());
         return ResponseEntity.status(200).body(new ApiResponse("Monthly subscription created"));
     }
 
-    @PostMapping("/yearly/{companyProfileId}")
-    public ResponseEntity<ApiResponse> yearlySubscription(@PathVariable Integer companyProfileId) {
-        subscriptionService.yearlySubscription(companyProfileId);
+    @PostMapping("/yearly") // user
+    public ResponseEntity<?> yearlySubscription(@AuthenticationPrincipal User user) {
+        subscriptionService.yearlySubscription(user.getId());
         return ResponseEntity.status(200).body(new ApiResponse("Yearly subscription created"));
     }
 
-    @PutMapping("/cancel/{subscriptionId}")
-    public ResponseEntity cancelSubscription(@AuthenticationPrincipal User user ,  @PathVariable Integer subscriptionId) {
-        subscriptionService.cancelSubscription(user.getId(),subscriptionId);
-        return ResponseEntity.status(200).body("Subscription cancelled successfully");
+    @PutMapping("/cancel") // user
+    public ResponseEntity<?> cancelSubscription(@AuthenticationPrincipal User user) {
+        subscriptionService.cancelSubscription(user.getId());
+        return ResponseEntity.status(200).body(new ApiResponse("Subscription cancelled successfully"));
     }
 }

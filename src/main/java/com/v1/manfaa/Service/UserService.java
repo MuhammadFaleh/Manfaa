@@ -6,13 +6,14 @@ import com.v1.manfaa.DTO.Out.UserDTOOut;
 import com.v1.manfaa.Model.User;
 import com.v1.manfaa.Repository.UserRepository;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
 

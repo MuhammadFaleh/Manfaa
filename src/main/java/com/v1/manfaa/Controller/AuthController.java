@@ -18,13 +18,13 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response) { // permit all
         LoginResponse loginResponse = authService.login(loginRequest, response);
         return ResponseEntity.status(200).body(loginResponse);
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(HttpServletResponse response) {
+    public ResponseEntity<?> logout(HttpServletResponse response) { // permit all
         authService.logout(response);
         return ResponseEntity.status(200).body(new ApiResponse("logout successful"));
     }

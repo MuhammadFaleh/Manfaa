@@ -20,40 +20,40 @@ public class ContractAgreementController {
 
     private final ContractAgreementService contractAgreementService;
 
-    @GetMapping("/get-all")
+    @GetMapping("/get-all") // admin
     public ResponseEntity<?> getContracts(@AuthenticationPrincipal User user) {
         return ResponseEntity.status(200).body(contractAgreementService.getContracts());
     }
 
-    @PostMapping("/create")
+    @PostMapping("/create") // user
     public ResponseEntity<?> createContract(@Validated(ValidationGroup1.class) @RequestBody ContractAgreementDTOIn dto,
                                             @AuthenticationPrincipal User user) {
         contractAgreementService.createContract(dto, user.getId());
         return ResponseEntity.status(200).body(new ApiResponse("Contract Created Successfully"));
     }
 
-    @DeleteMapping("/delete/{contractId}")
+    @DeleteMapping("/delete/{contractId}") // user
     public ResponseEntity<?> deleteContract(@PathVariable Integer contractId,
                                             @AuthenticationPrincipal User user) {
         contractAgreementService.deleteContract(user.getId(), contractId);
         return ResponseEntity.status(200).body(new ApiResponse("Contract Deleted Successfully"));
     }
 
-    @PostMapping("/accept/{contractId}")
+    @PutMapping("/accept/{contractId}") // user
     public ResponseEntity<?> acceptContract(@PathVariable Integer contractId,
                                             @AuthenticationPrincipal User user) {
         contractAgreementService.setAccepted(user.getId(), contractId);
         return ResponseEntity.status(200).body(new ApiResponse("Contract Accepted Successfully"));
     }
 
-    @PostMapping("/reject/{contractId}")
+    @PutMapping("/reject/{contractId}") // user
     public ResponseEntity<?> rejectContract(@PathVariable Integer contractId,
                                             @AuthenticationPrincipal User user) {
         contractAgreementService.setRejected(user.getId(), contractId);
         return ResponseEntity.status(200).body(new ApiResponse("Contract Rejected Successfully"));
     }
 
-    @PostMapping("/complete/{contractId}")
+    @PutMapping("/complete/{contractId}") // user
     public ResponseEntity<?> completeContract(@PathVariable Integer contractId,
                                               @Validated(ValidationGroup2.class) @RequestBody ContractAgreementDTOIn dto,
                                             @AuthenticationPrincipal User user) {

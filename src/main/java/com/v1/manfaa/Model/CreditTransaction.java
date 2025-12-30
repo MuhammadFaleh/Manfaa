@@ -39,4 +39,5 @@ public class CreditTransaction {
     @JoinColumn(name = "paid_company_id", nullable = false)
     private CompanyCredit paidCompany;
 
+
 }

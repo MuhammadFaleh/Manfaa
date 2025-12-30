@@ -23,24 +23,24 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @GetMapping("/get")
-     public ResponseEntity<List<CategoryDTOOut>> getAllCategory() {
+    @GetMapping("/get") // users and admins
+     public ResponseEntity<?> getAllCategory() {
         return ResponseEntity.status(200).body(categoryService.getAllCategory());
     }
 
-    @PostMapping("/add")
+    @PostMapping("/add") // admin
     public ResponseEntity<?> addCategory(@RequestBody @Valid  CategoryDTOIn categoryDTOIn, @AuthenticationPrincipal User user) {
         categoryService.addCategory(user.getId(), categoryDTOIn);
         return ResponseEntity.status(200).body(new ApiResponse("Category added"));
     }
 
-    @PutMapping("/update/{categoryId}")
+    @PutMapping("/update/{categoryId}") // admin
     public ResponseEntity<?> updateCategory(@PathVariable Integer categoryId, @RequestBody @Valid CategoryDTOIn categoryDTOIn , @AuthenticationPrincipal User user) {
         categoryService.updateCategory(user.getId(), categoryId, categoryDTOIn);
         return ResponseEntity.status(200).body(new ApiResponse("Category updated"));
     }
 
-    @DeleteMapping("/delete/{categoryId}")
+    @DeleteMapping("/delete/{categoryId}") // admin
     public ResponseEntity<?> deleteCategory(@PathVariable Integer categoryId , @AuthenticationPrincipal User user) {
         categoryService.deleteCategory(user.getId(), categoryId);
         return ResponseEntity.status(200).body(new ApiResponse("Category deleted"));

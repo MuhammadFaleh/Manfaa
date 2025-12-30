@@ -17,7 +17,6 @@ import java.util.Set;
 public class CompanyCredit {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(columnDefinition = "Double default 0")
@@ -35,8 +34,9 @@ public class CompanyCredit {
     @OneToMany(mappedBy = "paidCompany")
     private Set<CreditTransaction> incomingTransactions;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "companyCredit")
-    @PrimaryKeyJoinColumn
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "id")
     @JsonIgnore
     private CompanyProfile companyProfile;
 

@@ -84,11 +84,12 @@ public class ReviewService {
         if (reviewer.getId().equals(reviewed.getId())) {
             throw new ApiException("Company cannot review itself");
         }
-        if (!contractAgreement.getStatus().equalsIgnoreCase("COMPLETED")) {
-            throw new ApiException("Contract status must be COMPLETED to submit a review");
+        if (!contractAgreement.getStatus().equalsIgnoreCase("COMPLETED")
+                && !contractAgreement.getStatus().equalsIgnoreCase("DISPUTED")) {
+            throw new ApiException("Contract status must be COMPLETED or DISPUTED to submit a review");
         }
 
-        Review existingReview = reviewRepository.findReviewByContractAgreement(contractAgreement);
+        Review existingReview = reviewRepository.findReviewByContractAgreementIdAndReviewerProfileId(contractAgreementId,reviewerCompanyId); // needs updating
         if (existingReview != null) {
             throw new ApiException("This contract already has a review");
         }
@@ -128,15 +129,16 @@ public class ReviewService {
 
     public void deleteReview(Integer userId, Integer reviewId) {
         CompanyProfile company = companyProfileRepository.findCompanyProfileById(userId);
+        User user = userRepository.findUserById(userId);
         Review review = reviewRepository.findReviewById(reviewId);
 
-        if (company == null) {
+        if (company == null && user == null) {
             throw new ApiException("Company not found");
         }
         if (review == null) {
             throw new ApiException("Review not found");
         }
-        if (!review.getReviewerProfile().getId().equals(company.getId())) {
+        if (!review.getReviewerProfile().getId().equals(company.getId()) && !user.getRole().equalsIgnoreCase("ADMIN")) {
             throw new ApiException("You can only delete your own reviews");
         }
 

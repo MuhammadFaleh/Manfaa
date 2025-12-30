@@ -11,6 +11,7 @@ import com.v1.manfaa.Model.ServiceBid;
 import com.v1.manfaa.Model.ServiceRequest;
 import com.v1.manfaa.Repository.CategoryRepository;
 import com.v1.manfaa.Repository.CompanyProfileRepository;
+import com.v1.manfaa.Repository.ServiceBidRepository;
 import com.v1.manfaa.Repository.ServiceRequestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,10 +28,19 @@ public class ServiceRequestService {
     private final ServiceRequestRepository serviceRequestRepository;
     private final CompanyProfileRepository companyProfileRepository;
     private final CategoryRepository categoryRepository;
+    private final ServiceBidRepository serviceBidRepository;
 
     public List<ServiceRequestDTOOut> getServiceRequests(){
         List<ServiceRequestDTOOut> requestDTOOuts = new ArrayList<>();
         for(ServiceRequest request : serviceRequestRepository.findAll()){
+            requestDTOOuts.add(convertToDTOOut(request));
+        }
+        return requestDTOOuts;
+    }
+
+    public List<ServiceRequestDTOOut> getServiceRequestsSubscriber(){
+        List<ServiceRequestDTOOut> requestDTOOuts = new ArrayList<>();
+        for(ServiceRequest request : serviceRequestRepository.findServiceRequestCompanyProfileIsSubscriber(true)){
             requestDTOOuts.add(convertToDTOOut(request));
         }
         return requestDTOOuts;
@@ -224,6 +234,25 @@ public class ServiceRequestService {
             throw new ApiException("no request found");
         }
         return convertToFullDTOOut(request);
+    }
+
+    public ServiceRequestAndBidDTOOut getServiceRequestWithBidSubscribers(Integer id){
+        ServiceRequest request = serviceRequestRepository.findServiceRequestById(id);
+        if(request == null){
+            throw new ApiException("no request found");
+        }
+        return convertToFullDTOOut(request);
+    }
+
+    public ServiceRequestAndBidDTOOut convertToFullDTOOutSubs(ServiceRequest request){
+        if(request.getBarterCategory() != null){
+            return new ServiceRequestAndBidDTOOut(request.getId(),request.getTitle(),request.getDescription(),
+                    request.getDeliverables(),request.getExchangeType(),request.getTokenAmount(),request.getCategory().getName(),
+                    request.getBarterCategory().getName(),convertBidToShortDTOOut(serviceBidRepository.findServiceBidByServiceRequestIdAndCompanyProfileIsSubscriber(request.getId(),true)));
+        }
+        return new ServiceRequestAndBidDTOOut(request.getId(),request.getTitle(),request.getDescription(),
+                request.getDeliverables(),request.getExchangeType(),request.getTokenAmount(),request.getCategory().getName(),
+                null,convertBidToShortDTOOut(serviceBidRepository.findServiceBidByServiceRequestIdAndCompanyProfileIsSubscriber(request.getId(),true)));
     }
 
     public List<ServiceRequestDTOOut> getServiceRequestOfCompany(Integer companyid){

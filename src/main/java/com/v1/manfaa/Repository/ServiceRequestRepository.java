@@ -2,6 +2,7 @@ package com.v1.manfaa.Repository;
 
 import com.v1.manfaa.Model.CompanyProfile;
 import com.v1.manfaa.Model.ServiceRequest;
+import com.v1.manfaa.Model.Ticket;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -33,8 +34,9 @@ public interface ServiceRequestRepository extends JpaRepository<ServiceRequest, 
     @Query("SELECT sr FROM ServiceRequest sr WHERE sr.status = 'OPEN' ORDER BY sr.tokenAmount DESC")
     List<ServiceRequest> findAllByOrderByTokenAmountDesc();
 
-    // Admin or specific use
     ServiceRequest findServiceRequestById(Integer id);
+
+    List<ServiceRequest> findServiceRequestCompanyProfileIsSubscriber(Boolean isSubscriber);
 
 
 

@@ -39,7 +39,7 @@ public class User implements UserDetails {
     @Column(columnDefinition = "varchar(15) not null unique")
     private String phone_Number;
 
-    @Column(columnDefinition = "varchar(10) not null")
+    @Column(columnDefinition = "varchar(10) not null unique")
     private String recordNumber;
 
 

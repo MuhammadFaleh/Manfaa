@@ -20,12 +20,12 @@ public class ServiceBidController {
 
     private final ServiceBidService serviceBidService;
 
-    @GetMapping("/get-all")
+    @GetMapping("/get-all") // admin
     public ResponseEntity<?> getAllBids(@AuthenticationPrincipal User user) {
         return ResponseEntity.status(200).body(serviceBidService.getAllBids());
     }
 
-    @PostMapping("/create/{request_id}")
+    @PostMapping("/create/{request_id}") // user
     public ResponseEntity<?> createBid(@PathVariable Integer request_id,
                                        @Validated(ValidationGroup1.class) @RequestBody ServiceBidDTOIn dto,
                                        @AuthenticationPrincipal User user) {
@@ -33,7 +33,7 @@ public class ServiceBidController {
         return ResponseEntity.status(200).body(new ApiResponse("Bid Created Successfully"));
     }
 
-    @PutMapping("/update/{bid_id}")
+    @PutMapping("/update/{bid_id}") // user
     public ResponseEntity<?> updateBid(@PathVariable Integer bid_id,
                                        @Validated(ValidationGroup1.class) @RequestBody ServiceBidDTOIn dto,
                                        @AuthenticationPrincipal User user) {
@@ -41,21 +41,21 @@ public class ServiceBidController {
         return ResponseEntity.status(200).body(new ApiResponse("Bid Updated Successfully"));
     }
 
-    @DeleteMapping("/delete/{bid_id}")
+    @DeleteMapping("/delete/{bid_id}") // user
     public ResponseEntity<?> deleteBid(@PathVariable Integer bid_id,
                                        @AuthenticationPrincipal User user) {
         serviceBidService.deleteBid(user.getId(), bid_id);
         return ResponseEntity.status(200).body(new ApiResponse("Bid Deleted Successfully"));
     }
 
-    @PostMapping("/accept/{bid_id}")
+    @PutMapping("/accept/{bid_id}") // user
     public ResponseEntity<?> acceptBid(@PathVariable Integer bid_id,
                                        @AuthenticationPrincipal User user) {
         serviceBidService.acceptServiceBid(bid_id, user.getId());
         return ResponseEntity.status(200).body(new ApiResponse("Bid Accepted Successfully"));
     }
 
-    @PostMapping("/reject/{bid_id}")
+    @PutMapping("/reject/{bid_id}") // user
     public ResponseEntity<?> rejectBid(@PathVariable Integer bid_id,
                                        @Validated(ValidationGroup2.class) @RequestBody ServiceBidDTOIn dto,
                                        @AuthenticationPrincipal User user) {
