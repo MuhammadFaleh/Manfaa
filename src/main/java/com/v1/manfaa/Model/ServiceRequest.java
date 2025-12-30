@@ -43,6 +43,7 @@ public class ServiceRequest {
 
     // relationships
     @OneToMany(mappedBy = "serviceRequest")
+    @JsonIgnore
     private Set<ServiceBid> serviceBid;
     @ManyToOne
     @JsonIgnore
@@ -56,5 +57,6 @@ public class ServiceRequest {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
     @OneToOne(mappedBy = "serviceRequest")
+    @JsonIgnore
     private ContractAgreement contractAgreement;
 }

@@ -81,7 +81,7 @@ public class Configuration {
 
                         // Company endpoints
                         .requestMatchers("/api/v1/credit/get-my-credits").hasAuthority("COMPANY")
-                        .requestMatchers("/api/v1/contract/create", "/api/v1/contract/delete/**", "/api/v1/contract/accept/**", "/api/v1/contract/reject/**", "/api/v1/contract/complete/**").hasAuthority("COMPANY")
+                        .requestMatchers("/api/v1/contract/create", "/api/v1/contract/delete/**", "/api/v1/contract/accept/**", "/api/v1/contract/reject/**", "/api/v1/contract/complete/**" , "/api/v1/contract/get-my-contracts").hasAuthority("COMPANY")
                         .requestMatchers("/api/v1/transaction/get-my-transactions").hasAuthority("COMPANY")
                         .requestMatchers("/api/v1/payments/pay").hasAuthority("COMPANY")
                         .requestMatchers("/api/v1/service-request/create-token-request", "/api/v1/service-request/create-barter-request", "/api/v1/service-request/create-either-request").hasAuthority("COMPANY")

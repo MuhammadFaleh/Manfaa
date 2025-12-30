@@ -29,9 +29,11 @@ public class CompanyCredit {
     private Double totalEarned;
 
     @OneToMany(mappedBy = "payingCompany")
+    @JsonIgnore
     private Set<CreditTransaction> outgoingTransactions;
 
     @OneToMany(mappedBy = "paidCompany")
+    @JsonIgnore
     private Set<CreditTransaction> incomingTransactions;
 
     @OneToOne

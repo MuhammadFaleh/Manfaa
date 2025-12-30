@@ -69,6 +69,7 @@ public class ContractAgreementService {
             creditTransaction = holdTokens(serviceRequest.getCompanyProfile(),serviceBid.getCompanyProfile(),serviceBid.getTokenAmount());
             creditTransaction.setContractAgreement(contractAgreement);
             contractAgreement.setCreditTransaction(creditTransaction);
+            contractAgreement.setCreditTransaction(creditTransaction);
             creditTransactionRepository.save(creditTransaction);
         }
 
@@ -85,19 +86,19 @@ public class ContractAgreementService {
                 + "If you have any questions, feel free to contact us.\n\n"
                 + "Kind regards,\n"
                 + "Support Team";
-
         emailService.sendEmail(recipientEmail, subject, message);
+
 
         serviceRequest.getCompanyProfile().getRequesterContractAgreement().add(contractAgreement);
         serviceBid.getCompanyProfile().getProviderContractAgreement().add(contractAgreement);
         serviceBid.setContractAgreement(contractAgreement);
         serviceRequest.setContractAgreement(contractAgreement);
 
+        contractAgreementRepository.save(contractAgreement);
         serviceBidRepository.save(serviceBid);
         serviceRequestRepository.save(serviceRequest);
         companyProfileRepository.save(serviceRequest.getCompanyProfile());
         companyProfileRepository.save(serviceBid.getCompanyProfile());
-        contractAgreementRepository.save(contractAgreement);
     }
 
     public void deleteContract(Integer id, Integer contract_id){
@@ -108,6 +109,11 @@ public class ContractAgreementService {
         if(companyProfile == null || contractAgreement == null ||
                 !companyProfile.getId().equals(contractAgreement.getRequesterCompanyProfile().getId())){
             throw new ApiException("contract not found");
+        }
+
+        if(contractAgreement.getExchangeType().equalsIgnoreCase("TOKENS")){
+            contractAgreement.getCreditTransaction().setStatus("CANCELLED");
+            companyProfile.getCompanyCredit().setBalance(companyProfile.getCompanyCredit().getBalance() + contractAgreement.getTokenAmount());
         }
 
         if(!contractAgreement.getStatus().equalsIgnoreCase("PENDING")){
@@ -121,6 +127,8 @@ public class ContractAgreementService {
         provider.getProviderContractAgreement().remove(contractAgreement);
         serviceBid.setServiceRequest(null);
         serviceRequest.setContractAgreement(null);
+        CreditTransaction creditTransaction = contractAgreement.getCreditTransaction();
+        creditTransactionRepository.delete(creditTransaction);
         contractAgreementRepository.delete(contractAgreement);
         serviceRequestRepository.save(serviceRequest);
         serviceBidRepository.save(serviceBid);
@@ -148,7 +156,8 @@ public class ContractAgreementService {
                 && contractAgreement.getSecondPartyAgreement().equalsIgnoreCase("ACCEPTED")){
             contractAgreement.setStatus("ACTIVE");
             String subject = "Contract Activated";
-
+            String email1 = contractAgreement.getServiceBid().getCompanyProfile().getUser().getEmail();
+            String email2 = contractAgreement.getServiceRequest().getCompanyProfile().getUser().getEmail();
             String message = "Dear Service Requester or provider,\n\n"
                     + "We are pleased to inform you that the contract for the service request titled \""
                     + contractAgreement.getServiceRequest().getTitle() + "\" has been approved by both parties and is now active.\n\n"
@@ -158,8 +167,8 @@ public class ContractAgreementService {
                     + "Kind regards,\n"
                     + "Support Team";
 
-            emailService.sendEmail(contractAgreement.getServiceRequest().getCompanyProfile().getUser().getEmail(), subject, message);
-            emailService.sendEmail(contractAgreement.getServiceBid().getCompanyProfile().getUser().getEmail(), subject, message);
+            emailService.sendEmail(email2, subject, message);
+            emailService.sendEmail(email1, subject, message);
         }
 
         if(contractAgreement.getExchangeType().equalsIgnoreCase("TOKENS")){
@@ -351,5 +360,13 @@ public class ContractAgreementService {
                 contract.getIsExtended(),contract.getExchangeType(),contract.getTokenAmount(),contract.getStatus(),
                 contract.getCreatedAt(),contract.getClosedAt(), contract.getFirstPartyAgreement(), contract.getSecondPartyAgreement(),
                 contract.getServiceRequest(),contract.getServiceBid());
+    }
+
+    public List<ContractAgreementDTOOut> getMyContract(Integer id){
+        List<ContractAgreementDTOOut> dtoOuts = new ArrayList<>();
+        for(ContractAgreement contractAgreement : contractAgreementRepository.findContractAgreementByCompanyProfileId(id)){
+            dtoOuts.add(convertToDTO(contractAgreement));
+        }
+        return dtoOuts;
     }
 }

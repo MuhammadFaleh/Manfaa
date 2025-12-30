@@ -46,6 +46,7 @@ public class ServiceBid {
     @JsonIgnore
     private CompanyProfile companyProfile;
     @OneToOne(mappedBy = "serviceBid")
+    @JsonIgnore
     private ContractAgreement contractAgreement;
 
 
