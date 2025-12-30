@@ -28,7 +28,8 @@ public class CreditTransaction {
     private String status;
 
     @OneToOne
-    @JoinColumn(name = "contract_agreement_id", unique = true)
+    @JoinColumn(name = "id", unique = true)
+    @MapsId
     private ContractAgreement contractAgreement;
 
     @ManyToOne

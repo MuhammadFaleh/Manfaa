@@ -65,6 +65,9 @@ public class ContractAgreementService {
                 null,"ACCEPTED","PENDING",null,creditTransaction,
                 serviceRequest,serviceBid,serviceBid.getCompanyProfile(),serviceRequest.getCompanyProfile(),null);
 
+        ContractAgreement savedContract = contractAgreementRepository.save(contractAgreement);
+
+
         if(serviceBid.getPaymentMethod().equalsIgnoreCase("TOKENS")){
             creditTransaction = holdTokens(serviceRequest.getCompanyProfile(),serviceBid.getCompanyProfile(),serviceBid.getTokenAmount());
             creditTransaction.setContractAgreement(contractAgreement);
@@ -88,16 +91,15 @@ public class ContractAgreementService {
 
         emailService.sendEmail(recipientEmail, subject, message);
 
-        serviceRequest.getCompanyProfile().getRequesterContractAgreement().add(contractAgreement);
-        serviceBid.getCompanyProfile().getProviderContractAgreement().add(contractAgreement);
-        serviceBid.setContractAgreement(contractAgreement);
-        serviceRequest.setContractAgreement(contractAgreement);
+        serviceRequest.getCompanyProfile().getRequesterContractAgreement().add(savedContract);
+        serviceBid.getCompanyProfile().getProviderContractAgreement().add(savedContract);
+        serviceBid.setContractAgreement(savedContract);
+        serviceRequest.setContractAgreement(savedContract);
 
         serviceBidRepository.save(serviceBid);
         serviceRequestRepository.save(serviceRequest);
         companyProfileRepository.save(serviceRequest.getCompanyProfile());
         companyProfileRepository.save(serviceBid.getCompanyProfile());
-        contractAgreementRepository.save(contractAgreement);
     }
 
     public void deleteContract(Integer id, Integer contract_id){
@@ -215,9 +217,11 @@ public class ContractAgreementService {
         contractAgreementRepository.save(contractAgreement);
     }
 
-    public void complete(Integer contractId, Integer userId,ContractAgreementDTOIn dto){
+    public void complete(Integer userId, Integer contractId, ContractAgreementDTOIn dto){
         CompanyProfile companyProfile = companyProfileRepository.findCompanyProfileById(userId);
+
         ContractAgreement contractAgreement = contractAgreementRepository.findContractAgreementById(contractId);
+
         if(companyProfile == null || contractAgreement == null){
             throw new ApiException("contract or user not found");
         }

@@ -58,6 +58,6 @@ public class ContractAgreementController {
                                               @Validated(ValidationGroup2.class) @RequestBody ContractAgreementDTOIn dto,
                                             @AuthenticationPrincipal User user) {
         contractAgreementService.complete(user.getId(), contractId,dto);
-        return ResponseEntity.status(200).body(new ApiResponse("Contract Rejected Successfully"));
+        return ResponseEntity.status(200).body(new ApiResponse("Contract completed Successfully"));
     }
 }
