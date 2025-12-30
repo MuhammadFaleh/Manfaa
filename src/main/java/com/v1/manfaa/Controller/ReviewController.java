@@ -29,7 +29,8 @@ public class ReviewController {
 
 
     @PostMapping("/add/{reviewedCompanyId}/{contractId}") // user
-    public ResponseEntity<ApiResponse> addReview(@PathVariable Integer reviewedCompanyId, @PathVariable Integer contractId, @Valid @RequestBody ReviewDTOIn reviewDTOIn, @AuthenticationPrincipal User user) {
+    public ResponseEntity<ApiResponse> addReview(@PathVariable Integer reviewedCompanyId, @PathVariable Integer contractId,
+                                                 @Valid @RequestBody ReviewDTOIn reviewDTOIn, @AuthenticationPrincipal User user) {
         reviewService.addReview(user.getId(), reviewedCompanyId, contractId, reviewDTOIn);
         return ResponseEntity.status(200).body(new ApiResponse("Review added successfully"));
     }
@@ -53,7 +54,7 @@ public class ReviewController {
     }
 
     @GetMapping("/company/received") // user
-    public ResponseEntity<List<ReviewDTOOut>> getReceivedReviewsByCompany(@PathVariable Integer companyId, @AuthenticationPrincipal User user) {
+    public ResponseEntity<List<ReviewDTOOut>> getReceivedReviewsByCompany( @AuthenticationPrincipal User user) {
         return ResponseEntity.status(200).body(reviewService.getReceivedReviewsByCompany(user.getId()));
     }
 

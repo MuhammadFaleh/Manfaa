@@ -104,15 +104,18 @@ public class TicketService {
     public List<TicketDTOOut> convertToDtoOut(List<Ticket> tickets) {
         List<TicketDTOOut> ticketDTOOuts = new ArrayList<>();
         for(Ticket ticket : tickets){
-            if(ticket.getContractAgreement() == null){
-                ticketDTOOuts.add(new TicketDTOOut(ticket.getId(),null,ticket.getCompanyProfile().getName(),
-                        ticket.getTitle(),ticket.getBody(),ticket.getCategory(),ticket.getPriority(),ticket.getCreatedAt(),
-                        ticket.getResolvedAt(),ticket.getStatus()));
-            }
-
-            ticketDTOOuts.add(new TicketDTOOut(ticket.getId(),ticket.getContractAgreement().getId(),ticket.getCompanyProfile().getName(),
-                    ticket.getTitle(),ticket.getBody(),ticket.getCategory(),ticket.getPriority(),ticket.getCreatedAt(),
-                    ticket.getResolvedAt(),ticket.getStatus()));
+            ticketDTOOuts.add(new TicketDTOOut(
+                    ticket.getId(),
+                    ticket.getContractAgreement() != null ? ticket.getContractAgreement().getId() : null,
+                    ticket.getCompanyProfile().getName(),
+                    ticket.getTitle(),
+                    ticket.getBody(),
+                    ticket.getCategory(),
+                    ticket.getPriority(),
+                    ticket.getCreatedAt(),
+                    ticket.getResolvedAt(),
+                    ticket.getStatus()
+            ));
         }
 
         return ticketDTOOuts;
