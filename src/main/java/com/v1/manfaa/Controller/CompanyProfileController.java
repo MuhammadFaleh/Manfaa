@@ -21,41 +21,41 @@ public class CompanyProfileController {
 
     private final CompanyProfileService companyService;
 
-    @GetMapping("/get-all")
+    @GetMapping("/get-all") // admin
     public ResponseEntity<?> getAllCompanies(@AuthenticationPrincipal User user) {
         return ResponseEntity.status(200).body(companyService.getAllCompanyProfiles());
     }
 
-    @PostMapping("/register")
+    @PostMapping("/register") // all
     public ResponseEntity<?> registerCompany(@Valid @RequestBody RegisterDTOIn dto) {
         companyService.registerCompany(dto);
         return ResponseEntity.status(200).body(new ApiResponse("Company Registered Successfully"));
     }
 
-    @PutMapping("/update")
+    @PutMapping("/update") // both admin and user
     public ResponseEntity<?> updateCompanyProfile(@Valid @RequestBody CompanyProfileDTOIn dto,
                                                   @AuthenticationPrincipal User user) {
         companyService.updateCompanyProfile(user.getId(), dto);
         return ResponseEntity.status(200).body(new ApiResponse("Company Updated Successfully"));
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/delete") // admin
     public ResponseEntity<?> deleteCompanyProfile(@AuthenticationPrincipal User user) {
         companyService.deleteCompanyProfile(user.getId());
         return ResponseEntity.status(200).body(new ApiResponse("Company Deleted Successfully"));
     }
 
-    @GetMapping("/get-companies-full")
+    @GetMapping("/get-companies-full") // admin
     public ResponseEntity<?> getCompaniesFull(@AuthenticationPrincipal User user){
         return ResponseEntity.status(200).body(companyService.getAllCompaniesFullDetails());
     }
 
-    @GetMapping("/get-company-full")
+    @GetMapping("/get-company-full") // user and admin
     public ResponseEntity<?> getCompanyFull(@AuthenticationPrincipal User user){
         return ResponseEntity.status(200).body(companyService.getCompanyDetails(user.getId()));
     }
 
-    @GetMapping("/get-company-id-full/{companyId}")
+    @GetMapping("/get-company-id-full/{companyId}") // user and admin
     public ResponseEntity<?> getCompanyByIdFull(@PathVariable Integer companyId, @AuthenticationPrincipal User user){
         return ResponseEntity.status(200).body(companyService.getCompanyById(companyId));
     }

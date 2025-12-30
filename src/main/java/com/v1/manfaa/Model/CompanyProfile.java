@@ -18,8 +18,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class CompanyProfile {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer id;  // Remove @GeneratedValue
 
     @Column(columnDefinition = "varchar(20) not null")
     private String name;
@@ -40,7 +39,8 @@ public class CompanyProfile {
     private Boolean isSubscriber;
 
     @OneToOne
-    @JoinColumn(name = "user_id", unique = true)
+    @MapsId  // Add @MapsId here
+    @JoinColumn(name = "id")  // Change from user_id to id
     private User user;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -59,11 +59,12 @@ public class CompanyProfile {
     @JsonIgnore
     private Set<Review> receivedReviews;
 
-    @OneToOne
-    @MapsId
+    @OneToMany(mappedBy = "companyProfile")
+    @JsonIgnore
+    private Set<Payment> payments;
+
+    @OneToOne(mappedBy = "companyProfile", cascade = CascadeType.ALL)
     private CompanyCredit companyCredit;
-
-
 
     // relationships
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "companyProfile")
@@ -72,18 +73,15 @@ public class CompanyProfile {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "companyProfile")
     private Set<Ticket> tickets;
 
-
     @OneToMany(mappedBy = "companyProfile")
     private Set<ServiceRequest> serviceRequest;
+
     @OneToMany(mappedBy = "companyProfile")
     private Set<ServiceBid> serviceBid;
-    @OneToMany(mappedBy = "providerCompanyProfile" )
+
+    @OneToMany(mappedBy = "providerCompanyProfile")
     private Set<ContractAgreement> providerContractAgreement;
+
     @OneToMany(mappedBy = "requesterCompanyProfile")
     private Set<ContractAgreement> requesterContractAgreement;
-
-
-    @OneToMany(mappedBy = "companyProfile")
-    private Set<Subscription> subscription;
-
 }

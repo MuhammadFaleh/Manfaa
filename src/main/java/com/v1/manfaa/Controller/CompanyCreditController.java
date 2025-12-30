@@ -16,12 +16,12 @@ public class CompanyCreditController {
 
     private final CompanyCreditService companyCreditService;
 
-    @GetMapping("/get-all")
+    @GetMapping("/get-all") // admin
     public ResponseEntity<?> getAllCredits(@AuthenticationPrincipal User user) {
         return ResponseEntity.ok(companyCreditService.getAllCredits());
     }
 
-    @GetMapping("/get-my-credits")
+    @GetMapping("/get-my-credits") //user
     public ResponseEntity<?> getMyCredit(@AuthenticationPrincipal User user){
         return ResponseEntity.status(200).body(companyCreditService.getMyCredit(user.getId()));
     }

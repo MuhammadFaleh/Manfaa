@@ -3,10 +3,12 @@ package com.v1.manfaa.Controller;
 import com.v1.manfaa.Api.ApiResponse;
 import com.v1.manfaa.DTO.In.TicketDTOIn;
 import com.v1.manfaa.DTO.Out.TicketDTOOut;
+import com.v1.manfaa.Model.User;
 import com.v1.manfaa.Service.TicketService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,9 +20,9 @@ public class TicketController {
 
     private final TicketService ticketService;
 
-    @GetMapping("/get/{adminId}")
-    public ResponseEntity<List<TicketDTOOut>> getAllTickets(@PathVariable Integer adminId) {
-        return ResponseEntity.status(200).body(ticketService.getAllTickets(adminId));
+    @GetMapping("/get") // admin
+    public ResponseEntity<List<TicketDTOOut>> getAllTickets(@AuthenticationPrincipal User user) {
+        return ResponseEntity.status(200).body(ticketService.getAllTickets(user.getId()));
     }
 
     @PostMapping("/add/{companyId}/{contractId}")

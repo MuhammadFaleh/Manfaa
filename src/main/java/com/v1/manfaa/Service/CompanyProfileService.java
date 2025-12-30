@@ -32,7 +32,6 @@ public class CompanyProfileService {
         return convertToDtoOut(companyProfileRepository.findAll());
     }
 
-    @Transactional
     public void registerCompany(RegisterDTOIn dto) {
 
         if (userRepository.existsByEmail(dto.getEmail())) {
@@ -47,6 +46,8 @@ public class CompanyProfileService {
         user.setFullName(dto.getFullName());
         user.setPhone_Number(dto.getPhoneNumber());
         user.setRole("COMPANY");
+        user.setRecordNumber(dto.getRecordNumber());
+        userRepository.save(user);
 
         CompanyProfile company = new CompanyProfile();
         company.setName(dto.getCompanyName());
@@ -55,18 +56,16 @@ public class CompanyProfileService {
         company.setDescription(dto.getDescription());
         company.setCreatedAt(LocalDateTime.now());
         company.setIsSubscriber(false);
+        company.setUser(user);
+
+        companyProfileRepository.save(company);
 
         CompanyCredit companyCredit = new CompanyCredit();
         companyCredit.setBalance(0.0);
         companyCredit.setTotalEarned(0.0);
         companyCredit.setTotalSpent(0.0);
+        companyCredit.setCompanyProfile(company);
 
-        company.setCompanyCredit(companyCredit);
-        company.setUser(user);
-        user.setRecordNumber(dto.getRecordNumber());
-        user.setCompanyProfile(company);
-        userRepository.save(user);
-        companyProfileRepository.save(company);
         companyCreditRepository.save(companyCredit);
     }
 

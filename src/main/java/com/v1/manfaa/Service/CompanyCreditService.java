@@ -18,7 +18,7 @@ public class CompanyCreditService {
     }
 
     public CompanyCredit getMyCredit(Integer id){
-        return companyCreditRepository.findCompanyCreditByUserId(id);
+        return companyCreditRepository.findCompanyCreditByCompanyProfileId(id);
     }
 
 }

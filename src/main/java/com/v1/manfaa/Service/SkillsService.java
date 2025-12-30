@@ -8,14 +8,14 @@ import com.v1.manfaa.Model.Skills;
 import com.v1.manfaa.Repository.CompanyProfileRepository;
 import com.v1.manfaa.Repository.ServiceRequestRepository;
 import com.v1.manfaa.Repository.SkillsRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SkillsService {
     private final SkillsRepository skillsRepository;
     private final CompanyProfileRepository companyProfileRepository;

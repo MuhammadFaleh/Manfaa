@@ -20,33 +20,33 @@ public class ServiceRequestController {
 
     private final ServiceRequestService serviceRequestService;
 
-    @GetMapping("/get-requests")
+    @GetMapping("/get-requests") // user and admin
     public ResponseEntity<?> getServiceRequests(@AuthenticationPrincipal User user) {
         return ResponseEntity.status(200).body(serviceRequestService.getServiceRequests());
     }
 
-    @PostMapping("/create-token-request")
+    @PostMapping("/create-token-request") // user
     public ResponseEntity<?> createTokenRequest(@Valid @RequestBody ServiceRequestDTOIn dto,
                                                 @AuthenticationPrincipal User user) {
         serviceRequestService.createTokenRequest(dto, user.getId());
         return ResponseEntity.status(200).body(new ApiResponse("Token Request Created Successfully"));
     }
 
-    @PostMapping("/create-barter-request")
+    @PostMapping("/create-barter-request") // user
     public ResponseEntity<?> createBarterRequest(@Valid @RequestBody ServiceRequestDTOIn dto,
                                                  @AuthenticationPrincipal User user) {
         serviceRequestService.createBarterRequest(dto, user.getId());
         return ResponseEntity.status(200).body(new ApiResponse("Barter Request Created Successfully"));
     }
 
-    @PostMapping("/create-either-request")
+    @PostMapping("/create-either-request") // user
     public ResponseEntity<?> createEitherRequest(@Valid @RequestBody ServiceRequestDTOIn dto,
                                                  @AuthenticationPrincipal User user) {
         serviceRequestService.createEitherRequest(dto, user.getId());
         return ResponseEntity.status(200).body(new ApiResponse("Either Request Created Successfully"));
     }
 
-    @PutMapping("/update/{request_id}")
+    @PutMapping("/update/{request_id}") // user
     public ResponseEntity<?> updateRequest(@PathVariable Integer request_id,
                                            @Valid @RequestBody ServiceRequestDTOIn dto,
                                            @AuthenticationPrincipal User user) {
@@ -54,49 +54,49 @@ public class ServiceRequestController {
         return ResponseEntity.status(200).body(new ApiResponse("Request Updated Successfully"));
     }
 
-    @DeleteMapping("/delete/{request_id}")
+    @DeleteMapping("/delete/{request_id}") // user
     public ResponseEntity<?> deleteRequest(@PathVariable Integer request_id,
                                            @AuthenticationPrincipal User user) {
         serviceRequestService.deleteRequest(request_id, user.getId());
         return ResponseEntity.status(200).body(new ApiResponse("Request Deleted Successfully"));
     }
 
-    @GetMapping("/get-all-with-bids")
+    @GetMapping("/get-all-with-bids") // admin
     public ResponseEntity<?> getAllRequestWithBids(@AuthenticationPrincipal User user) {
         return ResponseEntity.status(200).body(serviceRequestService.getAllRequestWithBids());
     }
 
-    @GetMapping("/get-with-bids/{request_id}")
+    @GetMapping("/get-with-bids/{request_id}") // user
     public ResponseEntity<?> getServiceRequestWithBid(@PathVariable Integer request_id,
                                                       @AuthenticationPrincipal User user) {
         return ResponseEntity.status(200).body(serviceRequestService.getServiceRequestWithBid(request_id));
     }
 
-    @GetMapping("/get-company-requests/{company_id}")
+    @GetMapping("/get-company-requests/{company_id}") // admin
     public ResponseEntity<?> getServiceRequestOfCompany(@PathVariable Integer company_id,
                                                         @AuthenticationPrincipal User user) {
         return ResponseEntity.status(200).body(serviceRequestService.getServiceRequestOfCompany(company_id));
     }
 
-    @GetMapping("/search")
+    @GetMapping("/search") // user
     public ResponseEntity<?> searchServiceRequests(@RequestParam String keyword,
                                                    @AuthenticationPrincipal User user) {
         return ResponseEntity.status(200).body(serviceRequestService.searchServiceRequests(keyword));
     }
 
-    @GetMapping("/get-by-category/{category_id}")
+    @GetMapping("/get-by-category/{category_id}") // user
     public ResponseEntity<?> getServiceRequestsByCategory(@PathVariable Integer category_id,
                                                           @AuthenticationPrincipal User user) {
         return ResponseEntity.status(200).body(serviceRequestService.getServiceRequestsByCategory(category_id));
     }
-    //Todo:get By category barter
-    @GetMapping("/get-by-exchange-type/{exchange_type}")
+
+    @GetMapping("/get-by-exchange-type/{exchange_type}") // user
     public ResponseEntity<?> getServiceRequestsByExchangeType(@PathVariable String exchange_type,
                                                               @AuthenticationPrincipal User user) {
         return ResponseEntity.status(200).body(serviceRequestService.getServiceRequestsByExchangeType(exchange_type));
     }
 
-    @GetMapping("/get-by-date-range")
+    @GetMapping("/get-by-date-range") // user
     public ResponseEntity<?> getServiceRequestsByDateRange(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,

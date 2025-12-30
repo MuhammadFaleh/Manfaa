@@ -4,7 +4,6 @@ import com.v1.manfaa.Api.ApiException;
 import com.v1.manfaa.DTO.In.ServiceBidDTOIn;
 import com.v1.manfaa.DTO.Out.ServiceBidDTOOut;
 import com.v1.manfaa.Model.CompanyProfile;
-import com.v1.manfaa.Model.ContractAgreement;
 import com.v1.manfaa.Model.ServiceBid;
 import com.v1.manfaa.Model.ServiceRequest;
 import com.v1.manfaa.Repository.CategoryRepository;

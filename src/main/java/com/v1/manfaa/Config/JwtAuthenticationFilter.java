@@ -32,6 +32,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
+
+        // skiping jwt auth for public endpoints
+        String path = request.getRequestURI();
+        if (path.startsWith("/api/v1/auth/") ||
+                path.equals("/api/v1/company/register") ||
+                path.equals("/api/v1/users/add") ||
+                path.equals("/api/v1/payments/callback")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String jwt = null;
         jwt = extractJwtFromCookie(request);
         if (jwt == null) {

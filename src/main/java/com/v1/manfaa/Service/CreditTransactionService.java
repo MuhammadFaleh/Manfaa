@@ -1,7 +1,6 @@
 package com.v1.manfaa.Service;
 
 import com.v1.manfaa.Api.ApiException;
-import com.v1.manfaa.DTO.Out.CompanyProfileDTOOut;
 import com.v1.manfaa.DTO.Out.CreditTransactionDTOOut;
 import com.v1.manfaa.Model.*;
 import com.v1.manfaa.Repository.*;

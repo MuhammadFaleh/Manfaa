@@ -65,32 +65,38 @@ public class Configuration {
                         .requestMatchers("/api/v1/company/register").permitAll()
                         .requestMatchers("/api/v1/users/add").permitAll()
 
-                        .requestMatchers("/api/v1/transaction/get-my-transactions").hasAuthority("COMPANY")
-
-                        // admin endpoints
-                        .requestMatchers("/api/v1/service-bid/get-all").hasAuthority("ADMIN")
+                        // Admin endpoints
+                        .requestMatchers("/api/v1/category/add", "/api/v1/category/update/**", "/api/v1/category/delete/**").hasAuthority("ADMIN")
                         .requestMatchers("/api/v1/credit/get-all").hasAuthority("ADMIN")
-                        .requestMatchers("/api/v1/transaction/**").hasAuthority("ADMIN")
-                        .requestMatchers("/api/v1/company/get-all","/api/v1/company/get-companies-full","/api/v1/company/delete").hasAuthority("ADMIN")
+                        .requestMatchers("/api/v1/company/get-all", "/api/v1/company/get-companies-full", "/api/v1/company/delete").hasAuthority("ADMIN")
                         .requestMatchers("/api/v1/contract/get-all").hasAuthority("ADMIN")
-                        .requestMatchers("/api/v1/category/add/**", "/api/v1/category/update/**", "/api/v1/category/delete/**").hasAuthority("ADMIN")
-                        .requestMatchers("/api/v1/skills/update/**", "/api/v1/skills/add", "/api/v1/skills/delete/**").hasAuthority("ADMIN")
+                        .requestMatchers("/api/v1/transaction/get-all", "/api/v1/transaction/add-balance", "/api/v1/transaction/refund/**", "/api/v1/transaction/get-by-companyId/**").hasAuthority("ADMIN")
+                        .requestMatchers("/api/v1/service-request/get-all-with-bids", "/api/v1/service-request/get-company-requests/**").hasAuthority("ADMIN")
+                        .requestMatchers("/api/v1/review/get-all", "/api/v1/review/search/**", "/api/v1/review/exchange-type/**").hasAuthority("ADMIN")
+                        .requestMatchers("/api/v1/service-bid/get-all").hasAuthority("ADMIN")
+                        .requestMatchers("/api/v1/skills/add", "/api/v1/skills/update/**", "/api/v1/skills/delete/**").hasAuthority("ADMIN")
+                        .requestMatchers("/api/v1/subscriptions/get").hasAuthority("ADMIN")
 
-                        // company endpoints
-                        .requestMatchers("/api/v1/service-request/create-token-request").hasAuthority("COMPANY")
+                        // Company endpoints
                         .requestMatchers("/api/v1/credit/get-my-credits").hasAuthority("COMPANY")
-                        .requestMatchers("/api/v1/service-request/get-requests").hasAuthority("COMPANY")
-                        .requestMatchers("/api/v1/service-request/get-with-bids/**").hasAuthority("COMPANY")
-                        .requestMatchers("/api/v1/company/**").hasAuthority("COMPANY")
-                        .requestMatchers("/api/v1/service-bid/**").hasAuthority("COMPANY")
-                        .requestMatchers("/api/v1/contract/**").hasAuthority("COMPANY")
-                        .requestMatchers("/api/v1/category/get").hasAuthority("COMPANY")
-                        .requestMatchers("/api/v1/skills/**").hasAuthority("COMPANY")
-                        .requestMatchers("/api/v1/service-request/**").hasAuthority("COMPANY")
-                        .requestMatchers("/api/v1/payments/card").hasAuthority("COMPANY")
+                        .requestMatchers("/api/v1/contract/create", "/api/v1/contract/delete/**", "/api/v1/contract/accept/**", "/api/v1/contract/reject/**", "/api/v1/contract/complete/**").hasAuthority("COMPANY")
+                        .requestMatchers("/api/v1/transaction/get-my-transactions").hasAuthority("COMPANY")
+                        .requestMatchers("/api/v1/payments/pay").hasAuthority("COMPANY")
+                        .requestMatchers("/api/v1/service-request/create-token-request", "/api/v1/service-request/create-barter-request", "/api/v1/service-request/create-either-request").hasAuthority("COMPANY")
+                        .requestMatchers("/api/v1/service-request/update/**", "/api/v1/service-request/delete/**", "/api/v1/service-request/get-with-bids/**").hasAuthority("COMPANY")
+                        .requestMatchers("/api/v1/service-request/search", "/api/v1/service-request/get-by-category/**", "/api/v1/service-request/get-by-exchange-type/**", "/api/v1/service-request/get-by-date-range").hasAuthority("COMPANY")
+                        .requestMatchers("/api/v1/review/add/**", "/api/v1/review/update/**", "/api/v1/review/get/**").hasAuthority("COMPANY")
+                        .requestMatchers("/api/v1/review/company/received", "/api/v1/review/company/written", "/api/v1/review/company/reviewed-contracts", "/api/v1/review/company/best-to-worst").hasAuthority("COMPANY")
+                        .requestMatchers("/api/v1/service-bid/create/**", "/api/v1/service-bid/update/**", "/api/v1/service-bid/delete/**", "/api/v1/service-bid/accept/**", "/api/v1/service-bid/reject/**").hasAuthority("COMPANY")
+                        .requestMatchers("/api/v1/skills/assign-skill/**", "/api/v1/skills/remove-skill/**", "/api/v1/skills/get-skills", "/api/v1/skills/search/**").hasAuthority("COMPANY")
+                        .requestMatchers("/api/v1/subscriptions/monthly", "/api/v1/subscriptions/yearly", "/api/v1/subscriptions/cancel").hasAuthority("COMPANY")
 
-                        // subscription endpoints
-                        .requestMatchers("/api/v1/subscriptions/**").hasAuthority("COMPANY")
+                        // Both ADMIN and COMPANY endpoints
+                        .requestMatchers("/api/v1/category/get").hasAnyAuthority("ADMIN", "COMPANY")
+                        .requestMatchers("/api/v1/company/update", "/api/v1/company/get-company-full", "/api/v1/company/get-company-id-full/**").hasAnyAuthority("ADMIN", "COMPANY")
+                        .requestMatchers("/api/v1/service-request/get-requests").hasAnyAuthority("ADMIN", "COMPANY")
+                        .requestMatchers("/api/v1/review/delete/**").hasAnyAuthority("ADMIN", "COMPANY")
+                        .requestMatchers("/api/v1/skills/get").hasAnyAuthority("ADMIN", "COMPANY")
 
                         .anyRequest().authenticated()
                 )

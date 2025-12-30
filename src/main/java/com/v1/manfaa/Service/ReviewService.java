@@ -84,11 +84,12 @@ public class ReviewService {
         if (reviewer.getId().equals(reviewed.getId())) {
             throw new ApiException("Company cannot review itself");
         }
-        if (!contractAgreement.getStatus().equalsIgnoreCase("COMPLETED")) {
-            throw new ApiException("Contract status must be COMPLETED to submit a review");
+        if (!contractAgreement.getStatus().equalsIgnoreCase("COMPLETED")
+                && !contractAgreement.getStatus().equalsIgnoreCase("DISPUTED")) {
+            throw new ApiException("Contract status must be COMPLETED or DISPUTED to submit a review");
         }
 
-        Review existingReview = reviewRepository.findReviewByContractAgreement(contractAgreement);
+        Review existingReview = reviewRepository.findReviewByContractAgreementIdAndReviewerProfileId(contractAgreementId,reviewerCompanyId); // needs updating
         if (existingReview != null) {
             throw new ApiException("This contract already has a review");
         }
