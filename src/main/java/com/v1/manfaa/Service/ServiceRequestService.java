@@ -509,4 +509,12 @@ public class ServiceRequestService {
     return dtoOuts;
     }
 
+    public List<ServiceRequestDTOOut> getMyRequests(Integer id){
+        List<ServiceRequestDTOOut> serviceRequestDTOOuts = new ArrayList<>();
+        for(ServiceRequest serviceRequest : serviceRequestRepository.findServiceRequestsByCompanyProfileId(id)){
+            serviceRequestDTOOuts.add(convertToDTOOut(serviceRequest));
+        }
+        return serviceRequestDTOOuts;
+    }
+
 }

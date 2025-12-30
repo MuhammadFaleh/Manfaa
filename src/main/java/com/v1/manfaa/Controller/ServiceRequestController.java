@@ -96,6 +96,11 @@ public class ServiceRequestController {
         return ResponseEntity.status(200).body(serviceRequestService.getServiceRequestsByExchangeType(exchange_type));
     }
 
+    @GetMapping("/get-my-requests") // user
+    public ResponseEntity<?> getMyServiceRequests(@AuthenticationPrincipal User user) {
+        return ResponseEntity.status(200).body(serviceRequestService.getMyRequests(user.getId()));
+    }
+
     @GetMapping("/get-by-date-range") // user
     public ResponseEntity<?> getServiceRequestsByDateRange(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,

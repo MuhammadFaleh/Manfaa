@@ -3,6 +3,7 @@ package com.v1.manfaa.Service;
 import com.v1.manfaa.Api.ApiException;
 import com.v1.manfaa.DTO.In.ServiceBidDTOIn;
 import com.v1.manfaa.DTO.Out.ServiceBidDTOOut;
+import com.v1.manfaa.DTO.Out.ServiceRequestDTOOut;
 import com.v1.manfaa.Model.CompanyProfile;
 import com.v1.manfaa.Model.ServiceBid;
 import com.v1.manfaa.Model.ServiceRequest;
@@ -199,5 +200,13 @@ public class ServiceBidService {
         return new ServiceBidDTOOut(bid.getId(),bid.getDescription(),bid.getNotes(),bid.getDeliverables(),
                 bid.getEstimatedHours(),bid.getProposedStartDate(),bid.getProposedEndDate(),bid.getPaymentMethod(),
                 bid.getTokenAmount());
+    }
+
+    public List<ServiceBidDTOOut> getMyRequests(Integer id){
+        List<ServiceBidDTOOut> serviceBidDTOOuts = new ArrayList<>();
+        for(ServiceBid serviceBid : serviceBidRepository.findServiceBidByCompanyProfileId(id)){
+            serviceBidDTOOuts.add(convertToDTO(serviceBid));
+        }
+        return serviceBidDTOOuts;
     }
 }

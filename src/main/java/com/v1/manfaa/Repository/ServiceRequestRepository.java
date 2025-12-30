@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface ServiceRequestRepository extends JpaRepository<ServiceRequest, Integer> {
     List<ServiceRequest> findServiceRequestsByCompanyProfile(CompanyProfile companyProfile);
-
+    List<ServiceRequest> findServiceRequestsByCompanyProfileId(Integer id);
     List<ServiceRequest> findServiceRequestsByCompanyProfileAndStatus(CompanyProfile companyProfile, String status);
     @Query("SELECT sr FROM ServiceRequest sr WHERE sr.status = 'OPEN' AND (LOWER(sr.title) LIKE LOWER(CONCAT('%', ?1, '%')) OR LOWER(sr.description) LIKE LOWER(CONCAT('%', ?1, '%')))")
     List<ServiceRequest> searchServiceRequestsByKeyword(String keyword);

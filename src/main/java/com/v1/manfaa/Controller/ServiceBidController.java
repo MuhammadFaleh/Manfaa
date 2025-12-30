@@ -62,4 +62,9 @@ public class ServiceBidController {
         serviceBidService.rejectServiceBid(bid_id, user.getId(), dto.getNotes());
         return ResponseEntity.status(200).body(new ApiResponse("Bid Rejected Successfully"));
     }
+
+    @GetMapping("/get-my-bids") // admin
+    public ResponseEntity<?> getMyBids(@AuthenticationPrincipal User user) {
+        return ResponseEntity.status(200).body(serviceBidService.getMyRequests(user.getId()));
+    }
 }
