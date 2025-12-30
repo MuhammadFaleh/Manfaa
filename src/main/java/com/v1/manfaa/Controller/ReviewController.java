@@ -83,4 +83,18 @@ public class ReviewController {
     public ResponseEntity<ArrayList<ReviewDTOOut>> getBestToWorstReviews(@PathVariable Integer companyId, @AuthenticationPrincipal User user) {
         return ResponseEntity.status(200).body(reviewService.getBestToWorstReviews(companyId));
     }
+
+    @PostMapping("/create-pending-reviews/{contractAgreementId}")
+    public ResponseEntity<?> createPendingReviewsForContract(@PathVariable Integer contractAgreementId, @AuthenticationPrincipal User user) {
+        reviewService.createPendingReviewsOnCompletion(contractAgreementId);
+        return ResponseEntity.ok(new ApiResponse("Pending reviews created successfully for contract #" + contractAgreementId));
+    }
+
+
+    @PostMapping("/handle-rejection/{contractAgreementId}")
+    public ResponseEntity<?> handleContractRejection(@PathVariable Integer contractAgreementId, @AuthenticationPrincipal User user) {
+        reviewService.handleRejectionAndRefund(contractAgreementId);
+        return ResponseEntity.ok(new ApiResponse("Contract rejection handled and tokens refunded for contract #" + contractAgreementId));
+    }
 }
+

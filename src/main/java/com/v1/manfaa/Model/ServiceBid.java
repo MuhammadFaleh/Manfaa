@@ -19,16 +19,16 @@ public class ServiceBid {
     private Integer id;
     @Column(columnDefinition = "text not null check(length(description)<=500)")
     private String description;
-    @Column(columnDefinition = "text not null check(length(notes)<=500)")
+    @Column(columnDefinition = "text check(length(notes)<=500)")
     private String notes;
     @Column(columnDefinition = "text not null check(length(deliverables)<=500)")
     private String deliverables;
     @Column(name = "estimated_hours", columnDefinition = "double not null")
     private Double estimatedHours;
     @Column(name = "proposed_start_date", columnDefinition = "date not null")
-    private LocalDate proposedStartDate;
+    private LocalDateTime proposedStartDate;
     @Column(name = "proposed_end_date", columnDefinition = "date not null")
-    private LocalDate proposedEndDate;
+    private LocalDateTime proposedEndDate;
     @Column(name = "payment_method", columnDefinition = "varchar(20) not null check(payment_method = 'TOKENS' or payment_method='BARTER')")
     private String paymentMethod;
     @Column(name = "token_amount", columnDefinition = "double" )

@@ -35,8 +35,8 @@ public class CompanyCredit {
     @OneToMany(mappedBy = "paidCompany")
     private Set<CreditTransaction> incomingTransactions;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "companyCredit")
-    @PrimaryKeyJoinColumn
+
+    @OneToOne(mappedBy = "companyCredit")
     @JsonIgnore
     private CompanyProfile companyProfile;
 

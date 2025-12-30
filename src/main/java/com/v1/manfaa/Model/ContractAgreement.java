@@ -21,9 +21,9 @@ public class ContractAgreement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(name = "start_date", columnDefinition = "date not null")
-    private LocalDate StartDate;
+    private LocalDateTime StartDate;
     @Column(name = "end_date", columnDefinition = "date not null")
-    private LocalDate EndDate;
+    private LocalDateTime EndDate;
     @Column(name = "is_extended", columnDefinition = "boolean not null")
     private Boolean isExtended;
     @Column(name = "exchange_type", columnDefinition = "varchar(20) not null check(exchange_type = 'TOKENS' or exchange_type='BARTER')")

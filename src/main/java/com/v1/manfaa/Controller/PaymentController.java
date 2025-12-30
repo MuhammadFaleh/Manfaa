@@ -14,10 +14,7 @@ import java.util.Map;
 public class PaymentController {
     private final PaymentRequestService paymentService;
 
-    @PostMapping("/card")
-    public ResponseEntity<?> processPayment(@RequestBody PaymentRequest paymentRequest){
-        return ResponseEntity.status(200).body(paymentService.processPayment(paymentRequest));
-    }
+
 
 
 }

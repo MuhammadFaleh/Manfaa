@@ -24,7 +24,7 @@ public class SkillsController {
     private final SkillsService skillsService;
 
     @GetMapping("/get")
-    public ResponseEntity<List<SkillsDTOOut>>getAllSkills(){
+    public ResponseEntity<?>getAllSkills(){
         return ResponseEntity.status(200).body(skillsService.getAllSkills());
     }
 

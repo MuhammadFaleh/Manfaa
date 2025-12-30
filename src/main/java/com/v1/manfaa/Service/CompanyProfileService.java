@@ -47,6 +47,15 @@ public class CompanyProfileService {
         user.setFullName(dto.getFullName());
         user.setPhone_Number(dto.getPhoneNumber());
         user.setRole("COMPANY");
+        user.setRecordNumber(dto.getRecordNumber());
+
+        // new change (ibra& nawaf)
+        userRepository.save(user);
+
+        CompanyCredit companyCredit = new CompanyCredit();
+        companyCredit.setBalance(0.0);
+        companyCredit.setTotalEarned(0.0);
+        companyCredit.setTotalSpent(0.0);
 
         CompanyProfile company = new CompanyProfile();
         company.setName(dto.getCompanyName());
@@ -56,18 +65,17 @@ public class CompanyProfileService {
         company.setCreatedAt(LocalDateTime.now());
         company.setIsSubscriber(false);
 
-        CompanyCredit companyCredit = new CompanyCredit();
-        companyCredit.setBalance(0.0);
-        companyCredit.setTotalEarned(0.0);
-        companyCredit.setTotalSpent(0.0);
 
+
+        // Set bidirectional relationships
         company.setCompanyCredit(companyCredit);
+        companyCredit.setCompanyProfile(company);
+
         company.setUser(user);
-        user.setRecordNumber(dto.getRecordNumber());
         user.setCompanyProfile(company);
+
+        // Save user first (cascades to company and credit)
         userRepository.save(user);
-        companyProfileRepository.save(company);
-        companyCreditRepository.save(companyCredit);
     }
 
     public void updateCompanyProfile(Integer companyProfileId, CompanyProfileDTOIn dto) {

@@ -48,6 +48,7 @@ public class User implements UserDetails {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
+    @PrimaryKeyJoinColumn
     private CompanyProfile companyProfile;
 
     @Override

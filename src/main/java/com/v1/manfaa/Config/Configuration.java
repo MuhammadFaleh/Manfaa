@@ -61,6 +61,7 @@ public class Configuration {
                 .authorizeHttpRequests(auth -> auth
                         // Public endpoints
                         .requestMatchers("/api/v1/payments/card").hasAuthority("COMPANY")
+                        .requestMatchers("/api/v1/payments/callback").permitAll()
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/api/v1/company/register").permitAll()
                         .requestMatchers("/api/v1/users/add").permitAll()
@@ -76,7 +77,6 @@ public class Configuration {
                         .requestMatchers("/api/v1/skills/update/**", "/api/v1/skills/add", "/api/v1/skills/delete/**").hasAuthority("ADMIN")
 
                         // company endpoints
-                        .requestMatchers("/api/v1/service-request/create-token-request").hasAuthority("COMPANY")
                         .requestMatchers("/api/v1/service-request/get-requests").hasAuthority("COMPANY")
                         .requestMatchers("/api/v1/service-request/get-with-bids/**").hasAuthority("COMPANY")
                         .requestMatchers("/api/v1/company/**").hasAuthority("COMPANY")

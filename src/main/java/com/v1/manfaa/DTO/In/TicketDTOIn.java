@@ -17,7 +17,9 @@ public class TicketDTOIn {
     @Size(min = 10, max = 1000, message = "Body must be between 10 and 1000 characters")
     private String body;
 
-    @NotBlank(message = "Category is required")
+    @NotBlank(message = "Category is required") // contract - contract suggestion - platform
     private String category;
+
+
 
 }

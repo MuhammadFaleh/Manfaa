@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Data
@@ -21,7 +21,6 @@ public class ReviewDTOIn {
     @Size(min = 10, message = "description must be at least 10 characters")
     private String description;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate created_at;
+    private LocalDateTime created_at;
 
 }

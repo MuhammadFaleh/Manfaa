@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -16,8 +17,8 @@ public class ServiceBidDTOOut {
     private String notes;
     private String deliverables;
     private Double estimatedHours;
-    private LocalDate proposedStartDate;
-    private LocalDate proposedEndDate;
+    private LocalDateTime proposedStartDate;
+    private LocalDateTime proposedEndDate;
     private String exchangeType;
     private Double tokenAmount;
 }

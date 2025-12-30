@@ -39,9 +39,7 @@ public class CompanyProfile {
     @Column(name = "is_subscriber", columnDefinition = "boolean not null")
     private Boolean isSubscriber;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", unique = true)
-    private User user;
+
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
@@ -59,9 +57,14 @@ public class CompanyProfile {
     @JsonIgnore
     private Set<Review> receivedReviews;
 
-    @OneToOne
-    @MapsId
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "company_credit_id", referencedColumnName = "id")
     private CompanyCredit companyCredit;
+
+    @OneToOne
+    @JoinColumn(name = "user_id", unique = true)
+    @MapsId  // ← Keep this one for User relationship
+    private User user;
 
 
 
