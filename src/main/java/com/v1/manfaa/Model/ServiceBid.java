@@ -19,7 +19,7 @@ public class ServiceBid {
     private Integer id;
     @Column(columnDefinition = "text not null check(length(description)<=500)")
     private String description;
-    @Column(columnDefinition = "text not null check(length(notes)<=500)")
+    @Column(columnDefinition = "text  check(length(notes)<=500)")
     private String notes;
     @Column(columnDefinition = "text not null check(length(deliverables)<=500)")
     private String deliverables;

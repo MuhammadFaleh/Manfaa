@@ -32,7 +32,7 @@ public class ServiceRequest {
     private LocalDate proposedEndDate;
     @Column(name = "exchange_type", columnDefinition = "varchar(20) not null check(exchange_type = 'TOKENS' or exchange_type='BARTER' or exchange_type='EITHER')")
     private String exchangeType;
-    @Column(name = "token_amount", columnDefinition = "double not null" )
+    @Column(name = "token_amount", columnDefinition = "double default 0" )
     private Double tokenAmount;
     @Column(columnDefinition = "varchar(20) not null check(status = 'OPEN' or status='CLOSED' or status='CANCELLED')")
     private String status;

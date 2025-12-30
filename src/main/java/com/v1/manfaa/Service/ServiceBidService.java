@@ -48,6 +48,9 @@ public class ServiceBidService {
         if(serviceRequest == null){
             throw new ApiException("request not found");
         }
+        if(serviceRequest.getCompanyProfile().equals(companyProfile)){
+            throw new ApiException("Cant create bid to your request");
+        }
 
         if(!serviceRequest.getStatus().equalsIgnoreCase("OPEN")){
             throw new ApiException("service request is closed or canceled and can't take any new bids");
