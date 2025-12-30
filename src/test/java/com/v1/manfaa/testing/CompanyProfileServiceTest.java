@@ -9,6 +9,7 @@ import com.v1.manfaa.Model.*;
 import com.v1.manfaa.Repository.CompanyCreditRepository;
 import com.v1.manfaa.Repository.CompanyProfileRepository;
 import com.v1.manfaa.Repository.UserRepository;
+import com.v1.manfaa.Service.CompanyProfileService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -57,7 +58,7 @@ class CompanyProfileServiceTest {
         companyProfile.setId(1);
         companyProfile.setName("Test Company");
         companyProfile.setIndustry("Technology");
-        companyProfile.setTeamSize("10-50");
+        companyProfile.setTeamSize(10);
         companyProfile.setDescription("A test company");
         companyProfile.setCreatedAt(LocalDateTime.now());
         companyProfile.setIsSubscriber(false);
@@ -83,13 +84,13 @@ class CompanyProfileServiceTest {
         registerDTOIn.setRecordNumber("REC123");
         registerDTOIn.setCompanyName("New Company");
         registerDTOIn.setIndustry("Finance");
-        registerDTOIn.setTeamSize("50-100");
+        registerDTOIn.setTeamSize(50);
         registerDTOIn.setDescription("New company description");
 
         companyProfileDTOIn = new CompanyProfileDTOIn();
         companyProfileDTOIn.setName("Updated Company");
         companyProfileDTOIn.setIndustry("Healthcare");
-        companyProfileDTOIn.setTeamSize("100-500");
+        companyProfileDTOIn.setTeamSize(100);
         companyProfileDTOIn.setDescription("Updated description");
     }
 
@@ -166,7 +167,7 @@ class CompanyProfileServiceTest {
         verify(companyProfileRepository, times(1)).save(companyProfile);
         assertEquals("Updated Company", companyProfile.getName());
         assertEquals("Healthcare", companyProfile.getIndustry());
-        assertEquals("100-500", companyProfile.getTeamSize());
+        assertEquals(100, companyProfile.getTeamSize());
         assertEquals("Updated description", companyProfile.getDescription());
     }
 

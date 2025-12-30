@@ -4,6 +4,7 @@ import com.v1.manfaa.Api.ApiException;
 import com.v1.manfaa.DTO.Out.CreditTransactionDTOOut;
 import com.v1.manfaa.Model.*;
 import com.v1.manfaa.Repository.*;
+import com.v1.manfaa.Service.CreditTransactionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

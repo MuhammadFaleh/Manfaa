@@ -5,6 +5,7 @@ import com.v1.manfaa.DTO.In.UserDTOIn;
 import com.v1.manfaa.DTO.Out.UserDTOOut;
 import com.v1.manfaa.Model.User;
 import com.v1.manfaa.Repository.UserRepository;
+import com.v1.manfaa.Service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -54,12 +55,7 @@ class UserServiceTest {
         user2.setRole("ADMIN");
         user2.setPassword("hashedPassword2");
 
-        userDTOIn = new UserDTOIn();
-        userDTOIn.setUsername("newuser");
-        userDTOIn.setEmail("newuser@test.com");
-        userDTOIn.setFullName("New User");
-        userDTOIn.setPhone_Number("1112223333");
-        userDTOIn.setPassword("password123");
+        userDTOIn = new UserDTOIn("newuser","newuser@test.com","New User","1112223333@adc1","password123");
     }
 
     @Test
@@ -109,7 +105,7 @@ class UserServiceTest {
         assertEquals("newuser", savedUser.getUsername());
         assertEquals("newuser@test.com", savedUser.getEmail());
         assertEquals("New User", savedUser.getFullName());
-        assertEquals("1112223333", savedUser.getPhone_Number());
+        assertEquals("1112223333@adc1", savedUser.getPhone_Number());
         assertEquals("ADMIN", savedUser.getRole());
         assertEquals("0000000000", savedUser.getRecordNumber());
         
@@ -135,7 +131,7 @@ class UserServiceTest {
         assertEquals("newuser", updatedUser.getUsername());
         assertEquals("newuser@test.com", updatedUser.getEmail());
         assertEquals("New User", updatedUser.getFullName());
-        assertEquals("1112223333", updatedUser.getPhone_Number());
+        assertEquals("1112223333@adc1", updatedUser.getPhone_Number());
         assertTrue(new BCryptPasswordEncoder().matches("password123", updatedUser.getPassword()));
     }
 

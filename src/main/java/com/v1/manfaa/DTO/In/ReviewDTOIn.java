@@ -16,7 +16,7 @@ public class ReviewDTOIn {
 
     @Min(value = 1, message = "Rating must be at least 1")
     @Max(value = 5, message = "Rating must be at most 5")
-    private Integer rating;
+    private Double rating;
 
     @Size(min = 10, message = "description must be at least 10 characters")
     private String description;

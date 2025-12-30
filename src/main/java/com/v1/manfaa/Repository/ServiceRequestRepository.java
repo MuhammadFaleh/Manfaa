@@ -2,7 +2,6 @@ package com.v1.manfaa.Repository;
 
 import com.v1.manfaa.Model.CompanyProfile;
 import com.v1.manfaa.Model.ServiceRequest;
-import com.v1.manfaa.Model.Ticket;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -36,7 +35,7 @@ public interface ServiceRequestRepository extends JpaRepository<ServiceRequest, 
 
     ServiceRequest findServiceRequestById(Integer id);
 
-    List<ServiceRequest> findServiceRequestCompanyProfileIsSubscriber(Boolean isSubscriber);
+    List<ServiceRequest> findServiceRequestByCompanyProfileIsSubscriber(Boolean isSubscriber);
 
 
 

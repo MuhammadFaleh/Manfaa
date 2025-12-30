@@ -3,6 +3,7 @@ package com.v1.manfaa.testing;
 import com.v1.manfaa.Api.ApiException;
 import com.v1.manfaa.Model.User;
 import com.v1.manfaa.Repository.UserRepository;
+import com.v1.manfaa.Service.NewUserDetailsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -22,8 +22,8 @@ public class Review {
     private Integer id;
 
 
-    @Column(columnDefinition = "integer not null")
-    private Integer rating;
+    @Column(columnDefinition = "double not null")
+    private Double rating;
 
     @Column(columnDefinition = "text not null")
     private String description;

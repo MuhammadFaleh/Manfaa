@@ -10,7 +10,7 @@ public class ReviewDTOOut {
 
     private Integer id;
 
-    private Integer rating;
+    private Double rating;
 
     private String description;
 

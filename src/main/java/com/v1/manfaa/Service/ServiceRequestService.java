@@ -40,7 +40,7 @@ public class ServiceRequestService {
 
     public List<ServiceRequestDTOOut> getServiceRequestsSubscriber(){
         List<ServiceRequestDTOOut> requestDTOOuts = new ArrayList<>();
-        for(ServiceRequest request : serviceRequestRepository.findServiceRequestCompanyProfileIsSubscriber(true)){
+        for(ServiceRequest request : serviceRequestRepository.findServiceRequestByCompanyProfileIsSubscriber(true)){
             requestDTOOuts.add(convertToDTOOut(request));
         }
         return requestDTOOuts;

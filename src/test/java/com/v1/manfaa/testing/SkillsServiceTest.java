@@ -7,6 +7,7 @@ import com.v1.manfaa.Model.CompanyProfile;
 import com.v1.manfaa.Model.Skills;
 import com.v1.manfaa.Repository.CompanyProfileRepository;
 import com.v1.manfaa.Repository.SkillsRepository;
+import com.v1.manfaa.Service.SkillsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -47,9 +48,7 @@ class SkillsServiceTest {
         companyProfile.setName("Tech Company");
         companyProfile.setSkills(new HashSet<>());
 
-        skillsDTOIn = new SkillsDTOIn();
-        skillsDTOIn.setName("JavaScript");
-        skillsDTOIn.setDescription("JavaScript programming");
+        skillsDTOIn = new SkillsDTOIn("JavaScript","JavaScript programming");
     }
 
     @Test
