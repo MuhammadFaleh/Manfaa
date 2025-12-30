@@ -53,10 +53,9 @@ public class ServiceBidService {
             throw new ApiException("service request is closed or canceled and can't take any new bids");
         }
 
-        if(LocalDate.parse(dtoIn.getProposedStartDate()).isAfter(LocalDate.parse(dtoIn.getProposedEndDate())) ||
-                ChronoUnit.HOURS.between(LocalDate.parse(dtoIn.getProposedStartDate()),
-                        LocalDate.parse(dtoIn.getProposedEndDate())) <
-                        dtoIn.getEstimatedHours()){
+        if(LocalDate.parse(dtoIn.getProposedStartDate()).isAfter(LocalDate.parse(dtoIn.getProposedEndDate()))
+                || ChronoUnit.DAYS.between(LocalDate.parse(dtoIn.getProposedStartDate()),
+                LocalDate.parse(dtoIn.getProposedEndDate())) * 24 < dtoIn.getEstimatedHours()){
             throw new ApiException("wrong dates expected hours and date don't make sense");
         }
 
@@ -64,8 +63,7 @@ public class ServiceBidService {
 
         if(serviceRequest.getExchangeType().equalsIgnoreCase("EITHER")){
             bid.setPaymentMethod(dtoIn.getExchangeType());
-        }
-        if(serviceRequest.getExchangeType().equalsIgnoreCase(dtoIn.getExchangeType())){
+        }else if(serviceRequest.getExchangeType().equalsIgnoreCase(dtoIn.getExchangeType())){
             bid.setPaymentMethod(serviceRequest.getExchangeType());
         }else{
             throw new ApiException("exchange type not the same as the request");

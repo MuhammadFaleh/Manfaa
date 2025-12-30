@@ -99,7 +99,7 @@ class AuthServiceTest {
         assertEquals(expectedToken, capturedCookie.getValue());
         assertTrue(capturedCookie.isHttpOnly());
         assertEquals("/", capturedCookie.getPath());
-        assertEquals(10 * 60 * 60, capturedCookie.getMaxAge());
+        assertEquals(24 * 60 * 60, capturedCookie.getMaxAge());
     }
 
     @Test

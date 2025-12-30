@@ -185,8 +185,7 @@ public class TicketService {
 
     public void resolveTicket(Integer adminId, TicketResolveDTOIn dto){//update admin
         User user = userRepository.findUserById(adminId);
-        Ticket ticket = ticketRepository.findById(dto.getTicketId())
-                .orElseThrow(() -> new ApiException("Ticket not found"));
+        Ticket ticket = ticketRepository.findTicketById(dto.getTicketId());
         if(user == null) {
             throw new  ApiException("user not found");
         }
@@ -224,8 +223,7 @@ public class TicketService {
 
     public void rejectTicket(Integer adminId, TicketResolveDTOIn dto){//update admin
         User user = userRepository.findUserById(adminId);
-        Ticket ticket = ticketRepository.findById(dto.getTicketId())
-                .orElseThrow(() -> new ApiException("Ticket not found"));
+        Ticket ticket = ticketRepository.findTicketById(dto.getTicketId());
         if(user == null) {
             throw new  ApiException("user not found");
         }

@@ -55,7 +55,7 @@ class UserServiceTest {
         user2.setRole("ADMIN");
         user2.setPassword("hashedPassword2");
 
-        userDTOIn = new UserDTOIn("newuser","newuser@test.com","New User","1112223333@adc1","password123");
+        userDTOIn = new UserDTOIn("newuser","New User","newuser@test.com","1112223333@adc1","1112223333@adc1");
     }
 
     @Test
@@ -111,7 +111,7 @@ class UserServiceTest {
         
         // Verify password is hashed (not plain text)
         assertNotEquals("password123", savedUser.getPassword());
-        assertTrue(new BCryptPasswordEncoder().matches("password123", savedUser.getPassword()));
+        assertTrue(new BCryptPasswordEncoder().matches("1112223333@adc1", savedUser.getPassword()));
     }
 
     @Test
@@ -132,7 +132,7 @@ class UserServiceTest {
         assertEquals("newuser@test.com", updatedUser.getEmail());
         assertEquals("New User", updatedUser.getFullName());
         assertEquals("1112223333@adc1", updatedUser.getPhone_Number());
-        assertTrue(new BCryptPasswordEncoder().matches("password123", updatedUser.getPassword()));
+        assertTrue(new BCryptPasswordEncoder().matches("1112223333@adc1", updatedUser.getPassword()));
     }
 
     @Test
