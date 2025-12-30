@@ -99,6 +99,8 @@ public class Configuration {
                         .requestMatchers("/api/v1/category/get").hasAnyAuthority("ADMIN", "COMPANY")
                         .requestMatchers("/api/v1/company/update/**", "/api/v1/company/get-company-full", "/api/v1/company/get-company-id-full/**").hasAnyAuthority("ADMIN", "COMPANY")
                         .requestMatchers("/api/v1/service-request/get-requests").hasAnyAuthority("ADMIN", "COMPANY")
+                        .requestMatchers("/api/v1/service-request/get-requests-subscriber").hasAnyAuthority("ADMIN", "COMPANY")
+                        .requestMatchers("/api/v1/service-request/get-with-bids-subscribers/**").hasAnyAuthority("ADMIN", "COMPANY")
                         .requestMatchers("/api/v1/review/delete/**").hasAnyAuthority("ADMIN", "COMPANY")
                         .requestMatchers("/api/v1/skills/get").hasAnyAuthority("ADMIN", "COMPANY")
 

@@ -132,4 +132,15 @@ public class ServiceRequestController {
     public ResponseEntity<?> getCancelledServiceRequestOfCompany(@AuthenticationPrincipal User user) {
         return ResponseEntity.status(200).body(serviceRequestService.getCancelledServiceRequestOfCompany(user.getId()));
     }
+
+    @GetMapping("/get-with-bids-subscribers/{request_id}") // admin and company
+    public ResponseEntity<?> getServiceRequestWithBidSubscribers(@PathVariable Integer request_id,
+                                                                 @AuthenticationPrincipal User user) {
+        return ResponseEntity.status(200).body(serviceRequestService.getServiceRequestWithBidSubscribers(request_id));
+    }
+
+    @GetMapping("/get-requests-subscriber") // admin and company
+    public ResponseEntity<?> getServiceRequestsSubscriber(@AuthenticationPrincipal User user) {
+        return ResponseEntity.status(200).body(serviceRequestService.getServiceRequestsSubscriber());
+    }
 }
