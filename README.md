@@ -95,6 +95,7 @@ Companies gain access to **Token-based payments or Barter exchanges** with secur
 ---
 
 ## Diagrams
+
 erDiagram
     User ||--o{ subscription : has
     User ||--o{ company_profile : creates
@@ -249,6 +250,7 @@ erDiagram
         int amount
         Date create_at
     }
+```
 ### System Flow Diagrams
 
 #### Token-Based Service Exchange Flow
