@@ -96,6 +96,9 @@ Companies gain access to **Token-based payments or Barter exchanges** with secur
 
 ## Diagrams
 
+### Database Schema
+```mermaid
+
 erDiagram
     User ||--o{ subscription : has
     User ||--o{ company_profile : creates
