@@ -48,7 +48,7 @@ public class ServiceBidController {
         return ResponseEntity.status(200).body(new ApiResponse("Bid Deleted Successfully"));
     }
 
-    @PostMapping("/accept/{bid_id}")
+    @PutMapping("/accept/{bid_id}")
     public ResponseEntity<?> acceptBid(@PathVariable Integer bid_id,
                                        @AuthenticationPrincipal User user) {
         serviceBidService.acceptServiceBid(bid_id, user.getId());
