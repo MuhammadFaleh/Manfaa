@@ -95,7 +95,160 @@ Companies gain access to **Token-based payments or Barter exchanges** with secur
 ---
 
 ## Diagrams
-
+erDiagram
+    User ||--o{ subscription : has
+    User ||--o{ company_profile : creates
+    User ||--o{ Payment : makes
+    User {
+        int id PK
+        varchar(254) username
+        varchar(254) password
+        varchar(254) email
+        varchar(254) fullname
+        varchar(50) phone_number
+        varchar(50) role
+    }
+    
+    subscription ||--|| company_profile : "belongs to"
+    subscription {
+        int id PK
+        int company_profile_id FK
+        timestamp start_date
+        timestamp end_date
+        boolean is_active
+    }
+    
+    company_credit {
+        int id PK
+        int company_profile_id FK
+        int balance
+        int total_earned
+        int total_spent
+    }
+    
+    skills {
+        int id PK
+        varchar(30) name
+        text description "max 400"
+    }
+    
+    company_profile ||--o{ skills : requires
+    company_profile ||--o{ service_request : creates
+    company_profile ||--o{ category : "belongs to"
+    company_profile ||--o{ company_credit : has
+    company_profile ||--o{ review : receives
+    company_profile ||--o{ service_bid : receives
+    company_profile {
+        int id PK
+        varchar(20) name
+        varchar(20) industry
+        int team_size
+        TEXT description
+        datetime created_at
+        boolean is_subscriber
+        int user_id FK
+        int category_id FK
+    }
+    
+    category {
+        int id PK
+        varchar(30) name
+        text description "max 400"
+    }
+    
+    service_request ||--o{ service_bid : receives
+    service_request ||--|| category : "belongs to"
+    service_request {
+        int id PK
+        varchar(50) title
+        text description
+        text deliverables
+        Type estimated_hours
+        Type start_date
+        Type end_date
+        timestamp created_at
+        enum exchange_type
+        int token_amount
+        int category_id FK
+        int barter_category_id FK
+        int requester_id FK
+    }
+    
+    service_bid ||--|| contract_agreement : "leads to"
+    service_bid {
+        int id PK
+        Varchar(40) description
+        text deliverables
+        int estimated_hours
+        timestamp proposed_start_date
+        timestamp proposed_end_date
+        enum payment_method
+        int token_amount
+        enum status
+        text requester_notes
+        int service_request_id FK
+        int company_profile_id FK
+    }
+    
+    contract_agreement ||--o{ ticket : generates
+    contract_agreement ||--|| CreditTransaction : "results in"
+    contract_agreement {
+        int id PK
+        timestamp start_date
+        timestamp end_date
+        boolean is_renewed
+        enum payment_type
+        int token_amount
+        enum status
+        timestamp created_at
+        timestamp completed_at
+        int requester_company_id FK
+        int provider_company_id FK
+        int service_request_id FK
+        int service_bid_id FK
+    }
+    
+    ticket {
+        int id PK
+        varchar(254) title
+        text body
+        enum category
+        enum priority
+        timestamp created_at
+        timestamp resolved_at
+        enum status "rejected, processed, pending"
+        int user_id FK
+        int Contract_id FK
+    }
+    
+    review {
+        int id PK
+        double rating "1-5"
+        text description "300"
+        timestamp created_at
+        int contract_id FK
+        int reviewer_id FK
+        int reviewed_company_id FK
+    }
+    
+    Payment {
+        int id PK
+        varchar(254) paymentId
+        varchar(254) status
+        Double amount
+        varchar(254) currency
+        text description
+        Date createdAt
+    }
+    
+    CreditTransaction {
+        int id PK
+        int contract_agreement_id FK
+        int from_credit_account_id FK
+        int to_credit_account_id FK
+        int amount
+        Date create_at
+    }
 ### System Flow Diagrams
 
 #### Token-Based Service Exchange Flow
