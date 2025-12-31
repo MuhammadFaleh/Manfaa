@@ -269,7 +269,7 @@ stateDiagram-v2
 - **Bilateral Contract Approval**: Both requester and provider must approve contracts before activation.  
 - **Email Automation**: Automated notifications at every step (bids, contracts, reviews, refunds).  
 - **Advanced Review System**: Transparent feedback with search, filtering, and sorting capabilities.  
-- **Subscription Model**: Monthly (120 SAR) and yearly (1,200 SAR) plans with priority features.  
+- **Subscription Model**: Monthly (5 SAR) and yearly (50 SAR) plans with priority features.  
 - **Smart Ticket Prioritization**: Automatic priority assignment based on category and subscriber status.  
 
 ---
