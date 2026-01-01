@@ -3,14 +3,12 @@ package com.v1.manfaa.Service;
 import com.v1.manfaa.Api.ApiException;
 import com.v1.manfaa.DTO.In.ServiceBidDTOIn;
 import com.v1.manfaa.DTO.Out.ServiceBidDTOOut;
-import com.v1.manfaa.DTO.Out.ServiceRequestDTOOut;
+
 import com.v1.manfaa.Model.CompanyProfile;
 import com.v1.manfaa.Model.ServiceBid;
 import com.v1.manfaa.Model.ServiceRequest;
-import com.v1.manfaa.Repository.CategoryRepository;
-import com.v1.manfaa.Repository.CompanyProfileRepository;
-import com.v1.manfaa.Repository.ServiceBidRepository;
-import com.v1.manfaa.Repository.ServiceRequestRepository;
+import com.v1.manfaa.Model.User;
+import com.v1.manfaa.Repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +26,7 @@ public class ServiceBidService {
     private final CategoryRepository categoryRepository;
     private final ServiceBidRepository serviceBidRepository;
     private final EmailService emailService;
+    private final UserRepository userRepository;
 
     public List<ServiceBidDTOOut> getAllBids(){
         List<ServiceBidDTOOut> dtoOuts = new ArrayList<>();
@@ -44,17 +43,17 @@ public class ServiceBidService {
         ServiceRequest serviceRequest = serviceRequestRepository.findServiceRequestById(request_id);
 
         if(companyProfile == null){
-            throw new ApiException("company not found");
+            throw new ApiException("Company not found");
         }
         if(serviceRequest == null){
-            throw new ApiException("request not found");
+            throw new ApiException("Service request not found");
         }
         if(serviceRequest.getCompanyProfile().equals(companyProfile)){
             throw new ApiException("Cant create bid to your request");
         }
 
         if(!serviceRequest.getStatus().equalsIgnoreCase("OPEN")){
-            throw new ApiException("service request is closed or canceled and can't take any new bids");
+            throw new ApiException("Service request is closed or canceled and can't take any new bids");
         }
 
         if(LocalDate.parse(dtoIn.getProposedStartDate()).isAfter(LocalDate.parse(dtoIn.getProposedEndDate()))
@@ -64,7 +63,6 @@ public class ServiceBidService {
         }
 
         ServiceBid bid = convertToEntity(dtoIn);
-
         if(serviceRequest.getExchangeType().equalsIgnoreCase("EITHER")){
             bid.setPaymentMethod(dtoIn.getExchangeType());
         }else if(serviceRequest.getExchangeType().equalsIgnoreCase(dtoIn.getExchangeType())){
@@ -73,16 +71,36 @@ public class ServiceBidService {
             throw new ApiException("exchange type not the same as the request");
         }
 
+        String requestExchangeType = serviceRequest.getExchangeType();
+        String bidExchangeType = dtoIn.getExchangeType();
+
+        if(requestExchangeType.equalsIgnoreCase("EITHER")){
+            if(!bidExchangeType.equalsIgnoreCase("TOKENS") &&
+                    !bidExchangeType.equalsIgnoreCase("BARTER")){
+                throw new ApiException("Exchange type must be TOKENS or BARTER");
+            }
+            bid.setPaymentMethod(bidExchangeType);
+
+        } else {
+            if(!requestExchangeType.equalsIgnoreCase(bidExchangeType)){
+                throw new ApiException("Exchange type must be " + requestExchangeType);
+            }
+            bid.setPaymentMethod(requestExchangeType);
+        }
+
+        if(bid.getPaymentMethod().equalsIgnoreCase("TOKENS")){
+            if(bid.getTokenAmount() == null || bid.getTokenAmount() <= 0){
+                throw new ApiException("Token amount is required for TOKENS payment method");
+            }
+        }
+
         bid.setCreatedAt(LocalDateTime.now());
         bid.setStatus("PENDING");
         bid.setServiceRequest(serviceRequest);
         bid.setCompanyProfile(companyProfile);
-        serviceRequest.getServiceBid().add(bid);
-        companyProfile.getServiceBid().add(bid);
         serviceBidRepository.save(bid);
-        companyProfileRepository.save(companyProfile);
-        serviceRequestRepository.save(serviceRequest);
     }
+
 
     public void updateBid(ServiceBidDTOIn dtoIn, Integer id, Integer bid_id){
         ServiceBid bid  = serviceBidRepository.findServiceBidById(bid_id);
@@ -123,34 +141,41 @@ public class ServiceBidService {
     }
 
     public void acceptServiceBid(Integer serviceBidId, Integer userId){
-        CompanyProfile companyProfile = companyProfileRepository.findCompanyProfileById(userId);
+        User user = userRepository.findUserById(userId);
+        if(user == null){
+            throw new ApiException("User not found");
+        }
+
+        CompanyProfile companyProfile = user.getCompanyProfile();
         ServiceBid serviceBid = serviceBidRepository.findServiceBidById(serviceBidId);
 
-        if(companyProfile == null || serviceBid == null ||
-                !serviceBid.getServiceRequest().getCompanyProfile().getId().equals(userId)){
-            throw new ApiException("service bid not found");
+        if(serviceBid == null){
+            throw new ApiException("Service bid not found");
+        }
+
+        if(!serviceBid.getServiceRequest().getCompanyProfile().getId().equals(companyProfile.getId())){
+            throw new ApiException("Unauthorized: You don't own this service request");
         }
 
         ServiceRequest serviceRequest = serviceBid.getServiceRequest();
-        if(!serviceRequest.getStatus().equalsIgnoreCase("OPEN")
-                || !serviceBid.getStatus().equalsIgnoreCase("PENDING")){
-            throw new ApiException("service bid or request is already closed");
+        if(!serviceRequest.getStatus().equalsIgnoreCase("OPEN")){
+            throw new ApiException("Service request is already closed");
+        }
+        if(!serviceBid.getStatus().equalsIgnoreCase("PENDING")){
+            throw new ApiException("Service bid is not pending");
         }
 
         if(serviceBid.getTokenAmount() > companyProfile.getCompanyCredit().getBalance()){
             throw new ApiException("not enough credit");
         }
 
-
-
         serviceRequest.setStatus("CLOSED");
         serviceBid.setStatus("ACCEPTED");
+
         serviceRequestRepository.save(serviceRequest);
         serviceBidRepository.save(serviceBid);
-
-
-
     }
+
 
     public void rejectServiceBid(Integer serviceBidId, Integer userId, String notes){
         CompanyProfile companyProfile = companyProfileRepository.findCompanyProfileById(userId);

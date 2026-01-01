@@ -25,9 +25,9 @@ public class ServiceBid {
     private String deliverables;
     @Column(name = "estimated_hours", columnDefinition = "double not null")
     private Double estimatedHours;
-    @Column(name = "proposed_start_date", columnDefinition = "date not null")
+    @Column(name = "proposed_start_date", columnDefinition = "timestamp not null")
     private LocalDate proposedStartDate;
-    @Column(name = "proposed_end_date", columnDefinition = "date not null")
+    @Column(name = "proposed_end_date", columnDefinition = "timestamp not null")
     private LocalDate proposedEndDate;
     @Column(name = "payment_method", columnDefinition = "varchar(20) not null check(payment_method = 'TOKENS' or payment_method='BARTER')")
     private String paymentMethod;

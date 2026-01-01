@@ -49,6 +49,14 @@ public class CompanyProfileService {
         user.setRecordNumber(dto.getRecordNumber());
         userRepository.save(user);
 
+        // new change (ibra& nawaf)
+        userRepository.save(user);
+
+        CompanyCredit companyCredit = new CompanyCredit();
+        companyCredit.setBalance(0.0);
+        companyCredit.setTotalEarned(0.0);
+        companyCredit.setTotalSpent(0.0);
+
         CompanyProfile company = new CompanyProfile();
         company.setName(dto.getCompanyName());
         company.setIndustry(dto.getIndustry());
@@ -59,14 +67,14 @@ public class CompanyProfileService {
         company.setUser(user);
 
         companyProfileRepository.save(company);
-
-        CompanyCredit companyCredit = new CompanyCredit();
-        companyCredit.setBalance(0.0);
-        companyCredit.setTotalEarned(0.0);
-        companyCredit.setTotalSpent(0.0);
+        companyCreditRepository.save(companyCredit);
+        company.setCompanyCredit(companyCredit);
         companyCredit.setCompanyProfile(company);
 
-        companyCreditRepository.save(companyCredit);
+        company.setUser(user);
+        user.setCompanyProfile(company);
+
+        userRepository.save(user);
     }
 
     public void updateCompanyProfile(Integer userId, CompanyProfileDTOIn dto, Integer companyId) {

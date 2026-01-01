@@ -482,13 +482,19 @@ public class ServiceRequestService {
     }
 
     public ServiceRequestDTOOut convertToDTOOut(ServiceRequest request){
-        String categoryBarter = null;
-        if(request.getBarterCategory() != null){
-            categoryBarter = request.getBarterCategory().getName();
-        }
-        return new ServiceRequestDTOOut(request.getId(),request.getTitle(),request.getDescription(),request.getDeliverables(),
-                request.getProposedStartDate(),request.getProposedEndDate(),request.getExchangeType(),request.getTokenAmount(),
-                request.getCategory().getName(),categoryBarter);
+
+        return new ServiceRequestDTOOut(
+                request.getId(),
+                request.getTitle(),
+                request.getDescription(),
+                request.getDeliverables(),
+                request.getProposedStartDate(),
+                request.getProposedEndDate(),
+                request.getExchangeType(),
+                request.getTokenAmount(),
+                request.getCategory().getName(),
+                request.getBarterCategory() != null ? request.getBarterCategory().getName() : null
+        );
     }
 
     public ServiceRequestAndBidDTOOut convertToFullDTOOut(ServiceRequest request){

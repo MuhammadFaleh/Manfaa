@@ -3,10 +3,10 @@ package com.v1.manfaa.Controller;
 import com.v1.manfaa.Api.ApiResponse;
 import com.v1.manfaa.DTO.In.ContractAgreementDTOIn;
 import com.v1.manfaa.Model.User;
+import com.v1.manfaa.Repository.UserRepository;
 import com.v1.manfaa.Service.ContractAgreementService;
 import com.v1.manfaa.ValidationGroups.ValidationGroup1;
 import com.v1.manfaa.ValidationGroups.ValidationGroup2;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,12 +19,12 @@ import org.springframework.web.bind.annotation.*;
 public class ContractAgreementController {
 
     private final ContractAgreementService contractAgreementService;
+    private final UserRepository userRepository;
 
     @GetMapping("/get-all") // admin
     public ResponseEntity<?> getContracts(@AuthenticationPrincipal User user) {
         return ResponseEntity.status(200).body(contractAgreementService.getContracts());
     }
-
     @PostMapping("/create") // user
     public ResponseEntity<?> createContract(@Validated(ValidationGroup1.class) @RequestBody ContractAgreementDTOIn dto,
                                             @AuthenticationPrincipal User user) {
@@ -58,6 +58,6 @@ public class ContractAgreementController {
                                               @Validated(ValidationGroup2.class) @RequestBody ContractAgreementDTOIn dto,
                                             @AuthenticationPrincipal User user) {
         contractAgreementService.complete(user.getId(), contractId,dto);
-        return ResponseEntity.status(200).body(new ApiResponse("Contract Rejected Successfully"));
+        return ResponseEntity.status(200).body(new ApiResponse("Contract Completed Successfully"));
     }
 }

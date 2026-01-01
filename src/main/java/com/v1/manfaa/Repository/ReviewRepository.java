@@ -28,4 +28,6 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
 
     @Query("SELECT r FROM Review r WHERE r.reviewedProfile.id = :companyId ORDER BY r.rating DESC, r.created_at DESC")
     List<Review> findReviewsByCompanyOrderedBestToWorst(@Param("companyId") Integer companyId);
+
+    List<Review> findAllByContractAgreement(ContractAgreement contractAgreement);
 }

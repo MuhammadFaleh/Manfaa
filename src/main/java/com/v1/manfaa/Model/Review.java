@@ -28,7 +28,7 @@ public class Review {
     @Column(columnDefinition = "text not null")
     private String description;
 
-    @Column(columnDefinition = "timestamp not null")
+    @Column(columnDefinition = "timestamp not null")    // contract completed or disputed
     private LocalDateTime created_at;
 
 
