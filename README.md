@@ -199,7 +199,7 @@ DISPUTED (support ticket, admin resolution)
 
 ## 🔄 Core Workflows
 ### ERD
-<img src="ERD.png" alt="system ERD" width="50%"/>
+<img src="ERD.png" alt="system ERD" width="100%"/>
 ### Token-Based Request Flow
 <img src="token.png" alt="Token Request Flow" width="50%"/>
 
@@ -216,12 +216,12 @@ DISPUTED (support ticket, admin resolution)
 *Bilateral approval, milestone tracking, and completion verification*
 
 ### Subscription Flow
-<img src="sub.png" alt="Subscription Flow" width="100%"/>
+<img src="sub.png" alt="Subscription Flow" width="50%"/>
 
 *Flexible monthly/yearly plans with instant premium benefits*
 
 ### Support Ticket Flow
-<img src="ticket.png" alt="Ticket Flow" width="100%"/>
+<img src="ticket.png" alt="Ticket Flow" width="50%"/>
 
 *Priority-based support with automatic categorization*
 
@@ -264,11 +264,8 @@ These AI features leverage machine learning to make the platform more intuitive,
 
 ## 📚 API Documentation
 
-### User Endpoints
-<img src="user_endpoints.png" alt="User API Endpoints" width="50%"/>
-
-### Admin Endpoints
-<img src="admin_endpoints.png" alt="Admin API Endpoints" width="50%"/>
+### User Endpoints and Admin Endpoints
+<img src="user_endpoints.png" alt="User API Endpoints" width="50%"/> <img src="admin_endpoints.png" alt="Admin API Endpoints" width="50%"/>
 
 ### My Contributions
 
