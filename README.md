@@ -198,7 +198,8 @@ DISPUTED (support ticket, admin resolution)
 ---
 
 ## 🔄 Core Workflows
-
+### ERD
+<img src="erd.png" alt="system ERD" width="100%"/>
 ### Token-Based Request Flow
 <img src="token.png" alt="Token Request Flow" width="100%"/>
 
