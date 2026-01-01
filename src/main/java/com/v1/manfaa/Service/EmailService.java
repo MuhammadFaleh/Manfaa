@@ -24,4 +24,14 @@ public class EmailService {
         message.setText(body);
         mailSender.send(message);
     }
+
+    public void sendTwoEmail(String toEmail,String toEmail2, String subject, String body){
+        SimpleMailMessage message=new SimpleMailMessage();
+        message.setFrom(email);
+        message.setSubject(subject);
+        message.setTo(new String[] {toEmail2, toEmail});
+        message.setTo();
+        message.setText(body);
+        mailSender.send(message);
+    }
 }

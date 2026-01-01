@@ -347,13 +347,9 @@ public class ContractAgreementService {
                     + "Kind regards,\n"
                     + "Support Team";
 
-            emailService.sendEmail(
-                    contractAgreement.getProviderCompanyProfile().getUser().getEmail(),
-                    subject,
-                    message
-            );
-            emailService.sendEmail(
+            emailService.sendTwoEmail(
                     contractAgreement.getRequesterCompanyProfile().getUser().getEmail(),
+                    contractAgreement.getProviderCompanyProfile().getUser().getEmail(),
                     subject,
                     message
             );
