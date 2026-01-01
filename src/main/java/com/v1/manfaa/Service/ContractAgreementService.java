@@ -97,7 +97,7 @@ public class ContractAgreementService {
         contractAgreement.setTokenAmount(serviceBid.getTokenAmount());
         contractAgreement.setStatus("PENDING");
         contractAgreement.setCreatedAt(LocalDateTime.now());
-        contractAgreement.setFirstPartyAgreement("PENDING");
+        contractAgreement.setFirstPartyAgreement("ACCEPTED");
         contractAgreement.setSecondPartyAgreement("PENDING");
 
         // Set relationships
@@ -105,25 +105,21 @@ public class ContractAgreementService {
         contractAgreement.setServiceBid(serviceBid);
         contractAgreement.setProviderCompanyProfile(providerCompany);
         contractAgreement.setRequesterCompanyProfile(requesterCompany);
+        ContractAgreement savedContract = contractAgreementRepository.save(contractAgreement);
 
-        // Handle token escrow if needed
         if(serviceBid.getPaymentMethod().equalsIgnoreCase("TOKENS")){
-            // Check if requester has enough balance
             if(requesterCompany.getCompanyCredit().getBalance() < serviceBid.getTokenAmount()){
                 throw new ApiException("Insufficient token balance to create contract");
             }
-
-            CreditTransaction creditTransaction = holdTokens(
+            holdTokens(
                     requesterCompany,
                     providerCompany,
-                    serviceBid.getTokenAmount()
+                    serviceBid.getTokenAmount(),
+                    savedContract
             );
-            creditTransaction.setContractAgreement(contractAgreement);
-            contractAgreement.setCreditTransaction(creditTransaction);
-        }
 
-        // Save contract (cascade should handle relationships)
-        contractAgreementRepository.save(contractAgreement);
+
+        }
 
         // Send email notification
         String recipientEmail = providerCompany.getUser().getEmail();
@@ -216,7 +212,9 @@ public class ContractAgreementService {
 
         if(contractAgreement.getFirstPartyAgreement().equalsIgnoreCase("ACCEPTED") &&
                 contractAgreement.getSecondPartyAgreement().equalsIgnoreCase("ACCEPTED")){
-
+                if(contractAgreement.getExchangeType().equalsIgnoreCase("TOKENS")){
+                    contractAgreement.setFirstPartyAgreement("DELIVERED");
+                }
                 contractAgreement.setStatus("ACTIVE");
 
                 String subject = "Contract Activated";
@@ -342,6 +340,8 @@ public class ContractAgreementService {
                     + "This is to inform you that the contract associated with the service request titled \""
                     + contractAgreement.getServiceRequest().getTitle() + "\" has been successfully completed.\n\n"
                     + "All contractual obligations have been fulfilled, and the agreement is now formally closed.\n\n"
+                    +"first party deliveries: " + contractAgreement.getFirstPartyDelivered() +"\n\n"
+                    +"second party deliveries: " + contractAgreement.getSecondPartyDelivered() +"\n\n"
                     + "We appreciate the cooperation of both parties throughout the duration of this contract.\n\n"
                     + "If you have any questions or require further assistance, please contact the support team.\n\n"
                     + "Kind regards,\n"
@@ -390,20 +390,21 @@ public class ContractAgreementService {
         contractAgreementRepository.save(contractAgreement);
     }
 
-    public CreditTransaction holdTokens(CompanyProfile firstParty, CompanyProfile secondProfile,Double amount){
+    public void holdTokens(CompanyProfile firstParty, CompanyProfile secondProfile,Double amount,ContractAgreement contractAgreement){
         if(firstParty.getCompanyCredit().getBalance() < amount){
             throw new ApiException("not enough credit");
         }
 
         CreditTransaction creditTransaction = new CreditTransaction(null,amount,LocalDateTime.now(),"PENDING",
-                null,firstParty.getCompanyCredit(),secondProfile.getCompanyCredit());
+                contractAgreement,firstParty.getCompanyCredit(),secondProfile.getCompanyCredit());
 
         firstParty.getCompanyCredit().setBalance(firstParty.getCompanyCredit().getBalance() - amount);
 
         companyProfileRepository.save(firstParty);
         companyCreditRepository.save(firstParty.getCompanyCredit());
-
-        return creditTransaction;
+        creditTransactionRepository.save(creditTransaction);
+        contractAgreement.setCreditTransaction(creditTransaction);
+        creditTransactionRepository.save(creditTransaction);
     }
 
     public void releaseCredit(CreditTransaction creditTransaction){

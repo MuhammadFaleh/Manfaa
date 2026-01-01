@@ -167,6 +167,7 @@ public class ServiceRequestService {
     public void createBarterRequest(ServiceRequestDTOIn dtoIn, Integer id){
         CompanyProfile companyProfile = companyProfileRepository.findCompanyProfileById(id);
         Category category = categoryRepository.findCategoryById(dtoIn.getCategory());
+        Category barterCategory = categoryRepository.findCategoryById(dtoIn.getCategoryRequested());
 
         if(companyProfile == null){
             throw new ApiException("company not found");
@@ -176,9 +177,14 @@ public class ServiceRequestService {
             throw new ApiException("category not found");
         }
 
+        if(barterCategory == null){
+            throw new ApiException("requested category not found");
+        }
+
         ServiceRequest serviceRequest = convertToEntity(dtoIn);
 
         serviceRequest.setCategory(category);
+        serviceRequest.setBarterCategory(barterCategory);
         serviceRequest.setCompanyProfile(companyProfile);
         serviceRequest.setExchangeType("BARTER");
         serviceRequest.setCreatedAt(LocalDateTime.now());
@@ -194,6 +200,11 @@ public class ServiceRequestService {
     public void createEitherRequest(ServiceRequestDTOIn dtoIn, Integer id){
         CompanyProfile companyProfile = companyProfileRepository.findCompanyProfileById(id);
         Category category = categoryRepository.findCategoryById(dtoIn.getCategory());
+        Category barterCategory = categoryRepository.findCategoryById(dtoIn.getCategoryRequested());
+
+        if(barterCategory == null){
+            throw new ApiException("requested category not found");
+        }
 
         if(companyProfile == null){
             throw new ApiException("company not found");
@@ -206,6 +217,7 @@ public class ServiceRequestService {
         ServiceRequest serviceRequest = convertToEntity(dtoIn);
 
         serviceRequest.setCategory(category);
+        serviceRequest.setBarterCategory(barterCategory);
         serviceRequest.setCompanyProfile(companyProfile);
         serviceRequest.setExchangeType("EITHER");
         serviceRequest.setCreatedAt(LocalDateTime.now());
@@ -509,7 +521,7 @@ public class ServiceRequestService {
     public List<ServiceBidShortDTOOut> convertBidToShortDTOOut (Set<ServiceBid> bids){
         List<ServiceBidShortDTOOut> dtoOuts = new ArrayList<>();
         for(ServiceBid bid : bids){
-            dtoOuts.add(new ServiceBidShortDTOOut(bid.getId(),bid.getCompanyProfile().getName(),bid.getPaymentMethod(),
+            dtoOuts.add(new ServiceBidShortDTOOut(bid.getId(),bid.getCompanyProfile().getName(),bid.getDescription(),bid.getDeliverables(),bid.getPaymentMethod(),
                 bid.getTokenAmount(),bid.getStatus(),bid.getCreatedAt()));
         }
     return dtoOuts;

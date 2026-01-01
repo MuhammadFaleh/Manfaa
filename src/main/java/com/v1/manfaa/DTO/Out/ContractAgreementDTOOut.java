@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ContractAgreementDTOOut {
     private Integer id;
-    private LocalDateTime StartDate;
-    private LocalDateTime EndDate;
+    private LocalDate StartDate;
+    private LocalDate EndDate;
     private Boolean isExtended;
     private String exchangeType;
     private Double tokenAmount;

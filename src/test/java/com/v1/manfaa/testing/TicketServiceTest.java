@@ -85,7 +85,7 @@ class TicketServiceTest {
         ticket.setCompanyProfile(companyProfile);
         ticket.setContractAgreement(contractAgreement);
 
-        ticketDTOIn = new TicketDTOIn("New Ticket","Ticket description");
+        ticketDTOIn = new TicketDTOIn("New Ticket","Ticket description","CONTRACT");
 
         admin = new User();
         admin.setId(10);
@@ -241,7 +241,7 @@ class TicketServiceTest {
 
     @Test
     void updateTicket_Success() {
-        TicketDTOIn updateDTO = new TicketDTOIn("Updated Title","Updated Body");
+        TicketDTOIn updateDTO = new TicketDTOIn("Updated Title","Updated Body","CONTRACT");
 
         when(ticketRepository.findById(1)).thenReturn(Optional.of(ticket));
         when(companyProfileRepository.findCompanyProfileById(1)).thenReturn(companyProfile);

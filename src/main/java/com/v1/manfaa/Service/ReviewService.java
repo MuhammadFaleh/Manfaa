@@ -229,7 +229,7 @@ public class ReviewService {
         CompanyProfile provider = contractAgreement.getProviderCompanyProfile();
 
         // Check if reviews already exist for this contract
-        List<Review> existingReviews = reviewRepository.findAllByContractAgreement(contractAgreement);
+        List<Review> existingReviews = reviewRepository.findAllByContractAgreementId(contractAgreement.getId());
         if (!existingReviews.isEmpty()) {
             System.out.println("⚠️ Reviews already exist for contract #" + contractAgreementId);
             return;
@@ -238,7 +238,7 @@ public class ReviewService {
         // Create Review 1: Requester reviews Provider
         Review requesterReview = new Review(
                 null,
-                0, // Rating 0 means pending/not submitted yet
+                0.0, // Rating 0 means pending/not submitted yet
                 "PENDING - Review not yet submitted", // Placeholder description
                 LocalDateTime.now(),
                 requester, // Reviewer
@@ -249,7 +249,7 @@ public class ReviewService {
         // Create Review 2: Provider reviews Requester
         Review providerReview = new Review(
                 null,
-                0, // Rating 0 means pending/not submitted yet
+                0.0, // Rating 0 means pending/not submitted yet
                 "PENDING - Review not yet submitted", // Placeholder description
                 LocalDateTime.now(),
                 provider, // Reviewer

@@ -51,7 +51,7 @@ public class ContractAgreement {
     @OneToMany(mappedBy = "contractAgreement")
     private Set<Ticket> tickets;
 
-    @OneToOne(mappedBy = "contractAgreement")
+    @OneToOne(mappedBy = "contractAgreement", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private CreditTransaction creditTransaction;
 

@@ -15,13 +15,13 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ServiceBidDTOIn {
     private Integer serviceBidId;
-    @Size(max = 500, min = 50, message = "description should be between 50 and 500", groups = ValidationGroup1.class)
+    @Size(max = 500, min = 20, message = "description should be between 20 and 500", groups = ValidationGroup1.class)
     @NotBlank(message = "description should not be empty", groups = ValidationGroup1.class)
     private String description;
-    @Size(max = 500, message = "notes should be between 50 and 500", groups = ValidationGroup2.class)
+    @Size(max = 500, message = "notes should be between 20 and 500", groups = ValidationGroup2.class)
     @NotBlank(message = "notes on rejection should not be empty", groups = ValidationGroup2.class)
     private String notes;
-    @Size(max = 500, min = 50, message = "deliverables should be between 50 and 500", groups = ValidationGroup1.class)
+    @Size(max = 500, min = 20, message = "deliverables should be between 20 and 500", groups = ValidationGroup1.class)
     @NotBlank(message = "deliverables should not be empty", groups = ValidationGroup1.class)
     private String deliverables;
     @NotNull(message = "estimated hours should not be empty", groups = ValidationGroup1.class)

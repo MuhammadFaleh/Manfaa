@@ -41,7 +41,8 @@ public class ServiceBidService {
     public void createBid(Integer company_id, Integer request_id, ServiceBidDTOIn dtoIn){
         CompanyProfile companyProfile = companyProfileRepository.findCompanyProfileById(company_id);
         ServiceRequest serviceRequest = serviceRequestRepository.findServiceRequestById(request_id);
-
+        LocalDate startDate = null;
+        LocalDate endDate = null;
         if(companyProfile == null){
             throw new ApiException("Company not found");
         }
@@ -56,7 +57,18 @@ public class ServiceBidService {
             throw new ApiException("Service request is closed or canceled and can't take any new bids");
         }
 
-        if(LocalDate.parse(dtoIn.getProposedStartDate()).isAfter(LocalDate.parse(dtoIn.getProposedEndDate()))
+        try {
+            startDate = LocalDate.parse(dtoIn.getProposedStartDate());
+            endDate = LocalDate.parse(dtoIn.getProposedEndDate());
+        }catch (Exception e){
+            throw new ApiException("wrong date formats");
+        }
+
+        if(startDate.isBefore(LocalDate.now()) || endDate.isBefore(LocalDate.parse(dtoIn.getProposedStartDate()))){
+            throw new ApiException("wrong dates dates are in the past");
+        }
+
+        if(startDate.isAfter(endDate)
                 || ChronoUnit.DAYS.between(LocalDate.parse(dtoIn.getProposedStartDate()),
                 LocalDate.parse(dtoIn.getProposedEndDate())) * 24 < dtoIn.getEstimatedHours()){
             throw new ApiException("wrong dates expected hours and date don't make sense");
@@ -141,12 +153,12 @@ public class ServiceBidService {
     }
 
     public void acceptServiceBid(Integer serviceBidId, Integer userId){
-        User user = userRepository.findUserById(userId);
-        if(user == null){
+        CompanyProfile companyProfile = companyProfileRepository.findCompanyProfileById(userId);
+        if(companyProfile == null){
             throw new ApiException("User not found");
         }
 
-        CompanyProfile companyProfile = user.getCompanyProfile();
+
         ServiceBid serviceBid = serviceBidRepository.findServiceBidById(serviceBidId);
 
         if(serviceBid == null){
@@ -158,6 +170,7 @@ public class ServiceBidService {
         }
 
         ServiceRequest serviceRequest = serviceBid.getServiceRequest();
+
         if(!serviceRequest.getStatus().equalsIgnoreCase("OPEN")){
             throw new ApiException("Service request is already closed");
         }
@@ -170,6 +183,7 @@ public class ServiceBidService {
         }
 
         serviceRequest.setStatus("CLOSED");
+        serviceRequest.setClosedAt(LocalDateTime.now());
         serviceBid.setStatus("ACCEPTED");
 
         serviceRequestRepository.save(serviceRequest);

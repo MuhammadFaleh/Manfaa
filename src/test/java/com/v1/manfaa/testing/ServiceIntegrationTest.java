@@ -487,7 +487,7 @@ class ServiceIntegrationTest {
             contractAgreementService.createContract(dto, 1);
         });
 
-        assertEquals("request is not closed or bid is not accepted", exception.getMessage());
+        assertEquals("Request must be CLOSED to create contract", exception.getMessage());
     }
 
     @Test
@@ -507,7 +507,7 @@ class ServiceIntegrationTest {
             contractAgreementService.createContract(dto, 1);
         });
 
-        assertEquals("contract already exists", exception.getMessage());
+        assertEquals("Contract already exists for this bid", exception.getMessage());
     }
 
     @Test

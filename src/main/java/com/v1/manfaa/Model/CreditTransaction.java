@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 public class CreditTransaction {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(columnDefinition = "double not null")
@@ -28,7 +29,7 @@ public class CreditTransaction {
     private String status;
 
     @OneToOne
-    @JoinColumn(name = "contract_agreement_id", unique = true)
+    @JoinColumn(name = "contract_agreement_id", unique = true, nullable = false)
     private ContractAgreement contractAgreement;
 
     @ManyToOne

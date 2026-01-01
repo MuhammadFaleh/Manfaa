@@ -201,6 +201,12 @@ public class TicketService {
             throw new ApiException("Cannot update a resolved or closed ticket");
         }
 
+        if("CONTRACT".equalsIgnoreCase(ticket.getCategory())){
+            ContractAgreement contractAgreement= ticket.getContractAgreement();
+            contractAgreement.setStatus("DISPUTED");
+            contractAgreementRepository.save(contractAgreement);
+        }
+
         ticket.setResolvedBy(adminId);
         ticket.setResolvedAt(LocalDateTime.now());
         ticket.setStatus("RESOLVED");

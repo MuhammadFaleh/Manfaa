@@ -74,7 +74,7 @@ class ReviewServiceTest {
         contractAgreement.setServiceRequest(serviceRequest);
         contractAgreement.setServiceBid(serviceBid);
 
-        reviewDTOIn = new ReviewDTOIn(4.0, "Great service!", LocalDate.now());
+        reviewDTOIn = new ReviewDTOIn(4.0, "Great service!");
 
 
         review = new Review();
@@ -202,7 +202,7 @@ class ReviewServiceTest {
 
     @Test
     void updateReview_Success() {
-        ReviewDTOIn updateDTO = new ReviewDTOIn(5.0, "Updated review - Excellent!", LocalDate.now());
+        ReviewDTOIn updateDTO = new ReviewDTOIn(5.0, "Updated review - Excellent!");
         updateDTO.setRating(5.0);
         updateDTO.setDescription("Updated review - Excellent!");
 

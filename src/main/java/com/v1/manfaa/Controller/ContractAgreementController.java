@@ -60,4 +60,9 @@ public class ContractAgreementController {
         contractAgreementService.complete(user.getId(), contractId,dto);
         return ResponseEntity.status(200).body(new ApiResponse("Contract Completed Successfully"));
     }
+
+    @GetMapping("/get-my-contract") // admin
+    public ResponseEntity<?> getMyContracts(@AuthenticationPrincipal User user) {
+        return ResponseEntity.status(200).body(contractAgreementService.getMyContracts(user.getId()));
+    }
 }
