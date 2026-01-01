@@ -265,7 +265,11 @@ These AI features leverage machine learning to make the platform more intuitive,
 ## 📚 API Documentation
 
 ### User Endpoints and Admin Endpoints
-<img src="user_endpoints.png" alt="User API Endpoints" width="50%"/> <img src="admin_endpoints.png" alt="Admin API Endpoints" width="50%"/>
+
+<p float="left">
+  <img src="user_endpoints.png" alt="User API Endpoints" width="50%"/> 
+  <img src="admin_endpoints.png" alt="Admin API Endpoints" width="50%"/>
+</p>
 
 ### My Contributions
 
