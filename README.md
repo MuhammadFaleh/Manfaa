@@ -199,19 +199,19 @@ DISPUTED (support ticket, admin resolution)
 
 ## 🔄 Core Workflows
 ### ERD
-<img src="ERD.png" alt="system ERD" width="100%"/>
+<img src="ERD.png" alt="system ERD" width="50%"/>
 ### Token-Based Request Flow
-<img src="token.png" alt="Token Request Flow" width="100%"/>
+<img src="token.png" alt="Token Request Flow" width="50%"/>
 
 *Token requests involve escrow, secure payment, and automated transfers upon completion*
 
 ### Barter Request Flow
-<img src="barter.png" alt="Barter Request Flow" width="100%"/>
+<img src="barter.png" alt="Barter Request Flow" width="50%"/>
 
 *Direct service-for-service exchanges with mutual agreement tracking*
 
 ### Contract Management Flow
-<img src="contract.png" alt="Contract Flow" width="100%"/>
+<img src="contract.png" alt="Contract Flow" width="50%"/>
 
 *Bilateral approval, milestone tracking, and completion verification*
 
@@ -265,10 +265,10 @@ These AI features leverage machine learning to make the platform more intuitive,
 ## 📚 API Documentation
 
 ### User Endpoints
-<img src="user_endpoints.png" alt="User API Endpoints" width="100%"/>
+<img src="user_endpoints.png" alt="User API Endpoints" width="50%"/>
 
 ### Admin Endpoints
-<img src="admin_endpoints.png" alt="Admin API Endpoints" width="100%"/>
+<img src="admin_endpoints.png" alt="Admin API Endpoints" width="50%"/>
 
 ### My Contributions
 
